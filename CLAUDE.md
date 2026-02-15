@@ -6,6 +6,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a React single-page application built with Vite as the build tool and development server. The project uses modern JavaScript (ES modules) with JSX for React components.
 
+## Network Proxy Configuration
+
+**IMPORTANT**: All network operations (npm install, git push, vercel deploy, etc.) require proxy settings due to network restrictions.
+
+Before running any network-related commands, set the proxy environment variables:
+
+```bash
+export https_proxy=http://127.0.0.1:6152
+export http_proxy=http://127.0.0.1:6152
+export all_proxy=socks5://127.0.0.1:6153
+```
+
+### Common Network Operations with Proxy
+
+**Install dependencies:**
+```bash
+export https_proxy=http://127.0.0.1:6152 && export http_proxy=http://127.0.0.1:6152 && export all_proxy=socks5://127.0.0.1:6153 && npm install
+```
+
+**Push to GitHub:**
+```bash
+export https_proxy=http://127.0.0.1:6152 && export http_proxy=http://127.0.0.1:6152 && export all_proxy=socks5://127.0.0.1:6153 && git push
+```
+
+**Deploy to Vercel:**
+```bash
+export https_proxy=http://127.0.0.1:6152 && export http_proxy=http://127.0.0.1:6152 && export all_proxy=socks5://127.0.0.1:6153 && vercel --prod
+```
+
+**Tip**: You can add these exports to your `~/.zshrc` or `~/.bashrc` to make them persistent across terminal sessions.
+
 ## Development Commands
 
 ### Setup
