@@ -13,15 +13,15 @@ function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-cream to-white section-padding">
+      <section className="gradient-bg section-padding">
         <div className="container-custom text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+          <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
             {t('home.hero.title')}
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-600 mb-10 max-w-3xl mx-auto font-light">
             {t('home.hero.subtitle')}
           </p>
-          <Link to="/courses" className="btn-primary inline-block">
+          <Link to="/courses" className="btn-primary inline-block text-lg">
             {t('home.hero.cta')}
           </Link>
         </div>

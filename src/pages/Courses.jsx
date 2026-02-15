@@ -8,12 +8,12 @@ function Courses() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <section className="bg-gradient-to-br from-cream to-white section-padding py-12">
+      <section className="gradient-bg py-16">
         <div className="container-custom text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
             {t('courses.title')}
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto font-light">
             {t('courses.subtitle')}
           </p>
         </div>
@@ -78,7 +78,7 @@ function Courses() {
                       <span className="text-2xl font-bold text-primary">
                         ¥{course.price}
                       </span>
-                      <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-opacity-90 transition-all">
+                      <button className="bg-primary text-white px-8 py-2.5 rounded-full hover:bg-opacity-90 hover:shadow-lg transition-all font-medium">
                         {t('courses.enroll')}
                       </button>
                     </div>

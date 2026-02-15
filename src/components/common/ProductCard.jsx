@@ -46,7 +46,7 @@ function ProductCard({ product }) {
           </div>
           <button
             onClick={handleAddToCart}
-            className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-all"
+            className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-full hover:bg-opacity-90 hover:shadow-lg transition-all font-medium"
           >
             <HiShoppingCart size={18} />
             <span className="text-sm">{t('tools.addToCart')}</span>

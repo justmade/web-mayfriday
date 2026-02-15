@@ -7,9 +7,9 @@ function Studio() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <section className="bg-gradient-to-br from-cream to-white section-padding py-12">
+      <section className="gradient-bg py-16">
         <div className="container-custom text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
             {t('studio.title')}
           </h1>
         </div>

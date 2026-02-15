@@ -14,12 +14,12 @@ function Tools() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <section className="bg-gradient-to-br from-cream to-white section-padding py-12">
+      <section className="gradient-bg py-16">
         <div className="container-custom text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
             {t('tools.title')}
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto font-light">
             {t('tools.subtitle')}
           </p>
         </div>
@@ -36,10 +36,10 @@ function Tools() {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`px-6 py-2 rounded-full font-medium transition-all ${
+                  className={`px-6 py-2.5 rounded-full font-medium transition-all shadow-sm ${
                     selectedCategory === category.id
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? 'bg-primary text-white shadow-md'
+                      : 'bg-white text-gray-700 hover:bg-cream border border-gray-200'
                   }`}
                 >
                   {name}

@@ -1,7 +1,7 @@
 function Card({ children, className = '', hover = true }) {
   return (
     <div
-      className={`bg-white rounded-lg shadow-md overflow-hidden ${
+      className={`bg-white rounded-xl shadow-soft overflow-hidden ${
         hover ? 'card-hover' : ''
       } ${className}`}
     >

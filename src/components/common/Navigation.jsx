@@ -33,7 +33,7 @@ function Navigation() {
             <NavLink
               to={link.path}
               className={({ isActive }) =>
-                `text-gray-700 hover:text-primary transition-colors pb-1 border-b-2 ${
+                `text-gray-700 hover:text-primary transition-colors pb-1 border-b-2 font-medium ${
                   isActive ? 'border-primary text-primary' : 'border-transparent'
                 }`
               }
