@@ -10,8 +10,10 @@ function Navigation() {
   const navLinks = [
     { path: '/', label: t('nav.home') },
     { path: '/courses', label: t('nav.courses') },
+    { path: '/patterns', label: t('nav.patterns') },
     { path: '/tools', label: t('nav.tools') },
-    { path: '/studio', label: t('nav.studio') },
+    { path: '/resources', label: t('nav.resources') },
+    { path: '/membership', label: t('nav.membership') },
     { path: '/gallery', label: t('nav.gallery') },
   ]
 

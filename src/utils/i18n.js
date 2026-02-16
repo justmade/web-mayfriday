@@ -7,8 +7,10 @@ const resources = {
       nav: {
         home: '首页',
         courses: '课程',
+        patterns: '图案',
         tools: '工具',
-        studio: '工作室',
+        resources: '资源',
+        membership: '会员',
         gallery: '作品集',
       },
       home: {
@@ -104,8 +106,10 @@ const resources = {
       nav: {
         home: 'Home',
         courses: 'Courses',
+        patterns: 'Patterns',
         tools: 'Tools',
-        studio: 'Studio',
+        resources: 'Resources',
+        membership: 'Membership',
         gallery: 'Gallery',
       },
       home: {
