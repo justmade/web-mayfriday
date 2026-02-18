@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 .claude/
 .vercel/
+.ossutilconfig
+ossutil
+.env.local
+.env*.local

@@ -5,6 +5,7 @@ import Courses from './pages/Courses'
 import Patterns from './pages/Patterns'
 import Tools from './pages/Tools'
 import Resources from './pages/Resources'
+import ResourceDetail from './pages/ResourceDetail'
 import Membership from './pages/Membership'
 import Studio from './pages/Studio'
 import Gallery from './pages/Gallery'
@@ -19,6 +20,7 @@ function App() {
           <Route path="patterns" element={<Patterns />} />
           <Route path="tools" element={<Tools />} />
           <Route path="resources" element={<Resources />} />
+          <Route path="resources/:id" element={<ResourceDetail />} />
           <Route path="membership" element={<Membership />} />
           <Route path="studio" element={<Studio />} />
           <Route path="gallery" element={<Gallery />} />
