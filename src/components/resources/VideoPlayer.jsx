@@ -90,13 +90,19 @@ function VideoPlayer({ video }) {
             playing={isPlaying}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
+            onError={(e) => {
+              console.error('ReactPlayer错误:', e)
+              setError('视频加载失败，请刷新页面重试')
+            }}
             config={{
               file: {
                 attributes: {
+                  crossOrigin: 'anonymous',
                   controlsList: 'nodownload',
                   playsInline: true,
                   preload: 'metadata'
-                }
+                },
+                forceVideo: true
               }
             }}
           />
