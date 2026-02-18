@@ -29,7 +29,8 @@ export default async function handler(req, res) {
       accessKeyId: process.env.OSS_ACCESS_KEY_ID,
       accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
       bucket: process.env.OSS_BUCKET || 'web-mayfriday-videos',
-      region: process.env.OSS_REGION || 'oss-cn-beijing'
+      region: process.env.OSS_REGION || 'oss-cn-beijing',
+      secure: true  // 强制使用 HTTPS
     })
 
     // 生成24小时有效的签名URL
