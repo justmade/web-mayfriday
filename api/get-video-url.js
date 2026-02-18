@@ -3,7 +3,7 @@
  * 生成阿里云OSS私有视频的临时签名URL
  */
 
-const OSS = require('ali-oss')
+import OSS from 'ali-oss'
 
 export default async function handler(req, res) {
   // 只允许GET请求
