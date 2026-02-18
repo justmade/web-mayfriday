@@ -1,113 +1,155 @@
 export const articles = [
   {
     id: 1,
-    title: "编织基础：如何选择第一根编织针",
-    titleEn: "Weaving Basics: How to Choose Your First Needles",
+    title: "【钩针教程】耐看又俏皮的豹纹笔袋 - 包底包身完整演示",
+    titleEn: "[Crochet Tutorial] Stylish Leopard Pattern Pouch - Complete Demo",
     category: "tutorial",
     author: "李雅",
     authorEn: "Li Ya",
-    date: "2026-02-10",
-    readTime: "10分钟",
-    readTimeEn: "10 min read",
-    image: "/images/resources/needle-guide.jpg",
-    excerpt: "初学者如何选择合适的编织针？本文详细介绍不同材质、尺寸编织针的特点，并附视频演示...",
-    excerptEn: "How do beginners choose the right knitting needles? This article details different materials and sizes with video demo...",
-    tags: ["初学者", "工具选择", "编织针", "视频教程"],
-    tagsEn: ["beginner", "tool selection", "needles", "video tutorial"],
+    date: "2026-02-18",
+    readTime: "20分钟",
+    readTimeEn: "20 min read",
+    image: "/images/resources/leopard-pouch.jpg",
+    excerpt: "时尚豹纹图案钩针笔袋教程，包含包底和包身的完整编织演示视频。这款俏皮又实用的小物件，适合进阶学习者...",
+    excerptEn: "Fashionable leopard pattern crochet pouch tutorial with complete video demonstration of bottom and body. This stylish and practical piece is suitable for intermediate learners...",
+    tags: ["钩针", "笔袋", "豹纹", "视频教程"],
+    tagsEn: ["crochet", "pouch", "leopard pattern", "video tutorial"],
     contentBlocks: [
       {
         type: "text",
-        content: "编织针的选择对于初学者来说是非常重要的第一步。不同的材质、尺寸和类型会直接影响您的编织体验和作品效果。本教程将帮助您了解如何选择最适合自己的编织针。",
-        contentEn: "Choosing the right knitting needles is a crucial first step for beginners. Different materials, sizes, and types directly affect your knitting experience and final results. This tutorial will help you find the perfect needles for your needs."
+        content: "豹纹图案一直是时尚界的经典元素，将它运用到钩针编织中，可以制作出既时髦又实用的小物件。这个笔袋教程将带您完成包底和包身的编织，掌握豹纹花样的钩织技巧。",
+        contentEn: "Leopard print has always been a classic fashion element. Applying it to crochet allows you to create stylish and practical accessories. This pouch tutorial will guide you through crocheting the bottom and body, mastering leopard pattern techniques."
       },
       {
         type: "heading",
         level: 2,
-        content: "编织针的材质类型",
-        contentEn: "Types of Needle Materials"
-      },
-      {
-        type: "text",
-        content: "市面上常见的编织针主要有三种材质：竹针、金属针和塑料针。每种材质都有其独特的优缺点。",
-        contentEn: "There are three main types of knitting needles available: bamboo, metal, and plastic. Each material has its unique advantages and disadvantages."
+        content: "准备材料",
+        contentEn: "Materials Needed"
       },
       {
         type: "list",
         ordered: false,
         items: [
           {
-            content: "竹针：轻便、温暖、防滑，适合初学者和编织细腻作品",
-            contentEn: "Bamboo: lightweight, warm, non-slip, ideal for beginners and delicate work"
+            content: "钩针：2.5mm或3.0mm（根据线材粗细选择）",
+            contentEn: "Crochet hook: 2.5mm or 3.0mm (choose based on yarn weight)"
           },
           {
-            content: "金属针：光滑、快速、耐用，适合编织速度快的进阶者",
-            contentEn: "Metal: smooth, fast, durable, suitable for experienced knitters"
+            content: "棉线或混纺线：主色（米色/杏色）约50克，配色（棕色/黑色）约20克",
+            contentEn: "Cotton or blend yarn: main color (beige/apricot) ~50g, accent colors (brown/black) ~20g"
           },
           {
-            content: "塑料针：经济实惠、多彩，适合儿童学习和练习",
-            contentEn: "Plastic: affordable, colorful, great for children and practice"
+            content: "记号扣或别针：用于标记起始位置",
+            contentEn: "Stitch markers or pins: for marking starting position"
+          },
+          {
+            content: "剪刀和缝纫针",
+            contentEn: "Scissors and tapestry needle"
+          },
+          {
+            content: "拉链（可选）：15-20cm长",
+            contentEn: "Zipper (optional): 15-20cm long"
           }
         ]
       },
       {
         type: "callout",
-        style: "tip",
-        content: "💡 初学者建议从竹针开始，因为它们提供更好的摩擦力，可以防止针目滑落。",
-        contentEn: "💡 Beginners are recommended to start with bamboo needles as they provide better grip and prevent stitches from slipping off."
+        style: "info",
+        content: "ℹ️ 这个项目适合已经掌握基础钩针技法（锁针、短针、长针）的学习者。如果您是初学者，建议先从简单项目开始练习。",
+        contentEn: "ℹ️ This project is suitable for learners who have mastered basic crochet techniques (chain stitch, single crochet, double crochet). Beginners should start with simpler projects."
       },
       {
         type: "heading",
         level: 2,
-        content: "编织针尺寸指南",
-        contentEn: "Needle Size Guide"
+        content: "完整视频教程：包底与包身",
+        contentEn: "Complete Video Tutorial: Bottom and Body"
       },
       {
         type: "text",
-        content: "编织针的尺寸通常用毫米(mm)或美国编号系统标注。常用尺寸范围从2mm到15mm不等。",
-        contentEn: "Needle sizes are typically marked in millimeters (mm) or the US numbering system, commonly ranging from 2mm to 15mm."
+        content: "以下视频详细演示了豹纹笔袋从包底到包身的完整钩织过程，包括起针、豹纹花样的配色变换、以及形状塑造的技巧。建议边看边跟着钩织，暂停和回放功能可以帮助您更好地理解每个步骤。",
+        contentEn: "The following video demonstrates the complete crochet process from bottom to body, including starting chain, leopard pattern color changes, and shaping techniques. We recommend crocheting along with the video - use pause and replay to better understand each step."
       },
       {
-        type: "image",
-        src: "/images/resources/needle-sizes.jpg",
-        alt: "编织针尺寸对照表",
-        altEn: "Knitting needle size chart",
-        caption: "不同尺寸编织针对照图",
-        captionEn: "Comparison chart of different needle sizes"
+        type: "video",
+        platform: "oss",
+        src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/resources/1/leopard-pouch-tutorial.mp4",
+        thumbnail: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/resources/1/leopard-pouch-thumbnail.jpg",
+        duration: "19:10",
+        title: "豹纹笔袋完整教程 - 包底包身编织演示",
+        titleEn: "Leopard Pouch Complete Tutorial - Bottom and Body Demonstration"
       },
       {
         type: "heading",
         level: 2,
-        content: "如何选择适合的编织针",
-        contentEn: "How to Choose the Right Needles"
-      },
-      {
-        type: "text",
-        content: "选择编织针需要考虑您要编织的项目类型、毛线粗细以及个人的编织习惯。",
-        contentEn: "Choosing needles depends on your project type, yarn weight, and personal knitting style."
+        content: "关键技巧要点",
+        contentEn: "Key Techniques"
       },
       {
         type: "list",
         ordered: true,
         items: [
           {
-            content: "查看毛线标签上推荐的针号",
-            contentEn: "Check the recommended needle size on your yarn label"
+            content: "包底编织：从环形起针开始，采用螺旋钩法逐圈增加针数，形成椭圆形底部",
+            contentEn: "Bottom construction: Start with magic ring, use spiral method to increase stitches gradually forming oval bottom"
           },
           {
-            content: "考虑项目类型（围巾用粗针，花样用细针）",
-            contentEn: "Consider project type (thick needles for scarves, thin for intricate patterns)"
+            content: "豹纹配色：掌握换线技巧，在合适的位置切换颜色形成不规则斑点",
+            contentEn: "Leopard coloring: Master color changing technique, switch colors at right positions to create irregular spots"
           },
           {
-            content: "试编小样，确保织出理想的密度",
-            contentEn: "Knit a gauge swatch to ensure proper tension"
+            content: "包身塑形：底部完成后不加不减钩织侧壁，保持笔袋的立体形状",
+            contentEn: "Body shaping: After bottom is complete, crochet sides without increases/decreases to maintain pouch structure"
+          },
+          {
+            content: "收边处理：最后一圈可以用引拔针或短针收边，确保边缘整齐",
+            contentEn: "Edging: Use slip stitch or single crochet for last round to ensure neat edges"
+          }
+        ]
+      },
+      {
+        type: "callout",
+        style: "tip",
+        content: "💡 豹纹花样的关键在于配色的随机性。不要让斑点分布太规则，自然的不对称才是豹纹的魅力所在！",
+        contentEn: "💡 The key to leopard pattern is randomness in color placement. Don't make spots too regular - natural asymmetry is what makes leopard print charming!"
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "后续完成步骤",
+        contentEn: "Finishing Steps"
+      },
+      {
+        type: "text",
+        content: "包身钩完后，您可以根据个人喜好添加以下元素：",
+        contentEn: "After completing the body, you can add the following elements based on personal preference:"
+      },
+      {
+        type: "list",
+        ordered: false,
+        items: [
+          {
+            content: "缝上拉链：让笔袋更加实用，防止物品掉出",
+            contentEn: "Sew on a zipper: makes the pouch more practical and prevents items from falling out"
+          },
+          {
+            content: "添加内衬：使用布料制作内衬，提升质感和耐用度",
+            contentEn: "Add lining: use fabric to create lining for better texture and durability"
+          },
+          {
+            content: "装饰流苏：在拉链头或包身侧面添加流苏装饰",
+            contentEn: "Add tassels: attach tassels to zipper pull or sides for decoration"
+          },
+          {
+            content: "钩织包盖：如果不想用拉链，可以设计翻盖式包盖",
+            contentEn: "Crochet flap: if you don't want a zipper, design a flip-top cover"
           }
         ]
       },
       {
         type: "callout",
         style: "success",
-        content: "✅ 完成选择后，建议购买2-3种常用尺寸的针，这样可以应对大部分编织项目。",
-        contentEn: "✅ After making your choice, it's recommended to have 2-3 commonly used sizes to cover most projects."
+        content: "🎉 完成这个豹纹笔袋后，您就掌握了图案配色和立体造型的技巧，可以尝试制作更多不同图案和尺寸的钩针包包了！",
+        contentEn: "🎉 After completing this leopard pouch, you've mastered pattern coloring and 3D shaping techniques. You can now try making more crochet bags with different patterns and sizes!"
       }
     ]
   },
