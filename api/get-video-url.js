@@ -35,10 +35,7 @@ export default async function handler(req, res) {
 
     // 生成24小时有效的签名URL
     const signedUrl = client.signatureUrl(path, {
-      expires: 86400, // 24小时 = 86400秒
-      response: {
-        'content-type': 'video/mp4',
-      }
+      expires: 86400 // 24小时 = 86400秒
     })
 
     // 返回签名URL
