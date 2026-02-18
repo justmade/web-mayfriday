@@ -80,33 +80,24 @@ function VideoPlayer({ video }) {
               <p className="text-sm text-gray-400">{error}</p>
             </div>
           </div>
-        ) : (
-          // 视频播放器
-          <ReactPlayer
-            url={videoUrl}
-            width="100%"
-            height="100%"
-            controls={true}
-            playing={isPlaying}
+        ) : videoUrl ? (
+          // 使用原生 video 标签（更稳定）
+          <video
+            src={videoUrl}
+            controls
+            crossOrigin="anonymous"
+            playsInline
+            preload="metadata"
+            controlsList="nodownload"
+            className="w-full h-full"
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
             onError={(e) => {
-              console.error('ReactPlayer错误:', e)
+              console.error('视频加载错误:', e)
               setError('视频加载失败，请刷新页面重试')
             }}
-            config={{
-              file: {
-                attributes: {
-                  crossOrigin: 'anonymous',
-                  controlsList: 'nodownload',
-                  playsInline: true,
-                  preload: 'metadata'
-                },
-                forceVideo: true
-              }
-            }}
           />
-        )}
+        ) : null}
 
         {/* Duration Badge */}
         {video.duration && !isPlaying && !isLoading && (
