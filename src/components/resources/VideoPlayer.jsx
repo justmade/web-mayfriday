@@ -88,12 +88,6 @@ function VideoPlayer({ video }) {
             height="100%"
             controls={true}
             playing={isPlaying}
-            light={video.thumbnail || true}
-            playIcon={
-              <button className="w-20 h-20 bg-primary rounded-full flex items-center justify-center hover:bg-opacity-90 transition-all shadow-lg">
-                <HiPlay className="text-white text-4xl ml-1" />
-              </button>
-            }
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
             config={{
