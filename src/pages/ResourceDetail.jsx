@@ -6,9 +6,9 @@ import ContentRenderer from '../components/resources/ContentRenderer'
 import Card from '../components/common/Card'
 
 function ResourceDetail() {
-  const { id } = useParams()
+  const { slug } = useParams()
   const { t, i18n } = useTranslation()
-  const article = articles.find(a => a.id === parseInt(id))
+  const article = articles.find(a => a.slug === slug)
 
   // 如果文章不存在，显示404
   if (!article) {
@@ -126,7 +126,7 @@ function ResourceDetail() {
 
                 return (
                   <Card key={relatedArticle.id}>
-                    <Link to={`/resources/${relatedArticle.id}`}>
+                    <Link to={`/resources/${relatedArticle.slug}`}>
                       <div className="aspect-video bg-gray-200 overflow-hidden">
                         {relatedArticle.image && (
                           <img

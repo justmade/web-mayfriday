@@ -20,7 +20,7 @@ function App() {
           <Route path="patterns" element={<Patterns />} />
           <Route path="tools" element={<Tools />} />
           <Route path="resources" element={<Resources />} />
-          <Route path="resources/:id" element={<ResourceDetail />} />
+          <Route path="resources/:slug" element={<ResourceDetail />} />
           <Route path="membership" element={<Membership />} />
           <Route path="studio" element={<Studio />} />
           <Route path="gallery" element={<Gallery />} />

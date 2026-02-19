@@ -86,7 +86,7 @@ function Resources() {
                   {/* Content */}
                   <div className="p-6">
                     <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 hover:text-primary transition-colors">
-                      <Link to={`/resources/${article.id}`}>{title}</Link>
+                      <Link to={`/resources/${article.slug}`}>{title}</Link>
                     </h2>
 
                     <p className="text-gray-600 mb-4 line-clamp-3">{excerpt}</p>

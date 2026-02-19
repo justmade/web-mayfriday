@@ -1,6 +1,7 @@
 export const articles = [
   {
     id: 1,
+    slug: "leopard-pouch-crochet-tutorial",
     title: "【钩针教程】耐看又俏皮的豹纹笔袋 - 包底包身完整演示",
     titleEn: "[Crochet Tutorial] Stylish Leopard Pattern Pouch - Complete Demo",
     category: "tutorial",
@@ -155,6 +156,7 @@ export const articles = [
   },
   {
     id: 2,
+    slug: "color-matching-guide-autumn-winter",
     title: "色彩搭配指南：打造温暖的秋冬编织作品",
     titleEn: "Color Matching Guide: Creating Warm Autumn-Winter Pieces",
     category: "article",
@@ -208,6 +210,7 @@ export const articles = [
   },
   {
     id: 3,
+    slug: "knitting-scarf-tutorial-for-beginners",
     title: "【教程】从零开始编织围巾 - 详细步骤图解",
     titleEn: "[Tutorial] Knitting a Scarf from Scratch - Detailed Steps",
     category: "tutorial",
@@ -367,6 +370,7 @@ export const articles = [
   },
   {
     id: 4,
+    slug: "yarn-care-guide",
     title: "毛线保养秘籍：让您的作品持久如新",
     titleEn: "Yarn Care Secrets: Keep Your Work Looking New",
     category: "guide",
@@ -424,6 +428,7 @@ export const articles = [
   },
   {
     id: 5,
+    slug: "advanced-knitting-patterns",
     title: "进阶技巧：如何编织复杂花样",
     titleEn: "Advanced Techniques: How to Knit Complex Patterns",
     category: "tutorial",
@@ -464,6 +469,7 @@ export const articles = [
   },
   {
     id: 6,
+    slug: "weaving-history-traditional-craft",
     title: "编织历史：传统工艺的现代演绎",
     titleEn: "Weaving History: Modern Interpretation of Traditional Craft",
     category: "article",
@@ -498,6 +504,7 @@ export const articles = [
   },
   {
     id: 7,
+    slug: "knitting-skills-progression-roadmap",
     title: "【学习指南】编织技能进阶路线图",
     titleEn: "[Study Guide] Weaving Skills Progression Roadmap",
     category: "guide",
@@ -569,6 +576,7 @@ export const articles = [
   },
   {
     id: 8,
+    slug: "common-knitting-mistakes-faq",
     title: "常见问题解答：编织中的10个常见错误",
     titleEn: "FAQ: 10 Common Mistakes in Weaving",
     category: "guide",
