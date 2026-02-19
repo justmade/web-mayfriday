@@ -13,14 +13,20 @@ function VideoPlayer({ video }) {
   const title = video.title && (i18n.language === 'zh' ? video.title : (video.titleEn || video.title))
 
   useEffect(() => {
+    // 检查是否是 HLS 视频（.m3u8）
+    const isHLS = video.src && video.src.includes('.m3u8')
+
     // 检查是否是阿里云OSS URL（需要签名）
     const isOSSUrl = video.src && (
       video.src.includes('aliyuncs.com') ||
       video.platform === 'oss'
     )
 
-    if (isOSSUrl) {
-      // 从API获取签名URL
+    if (isHLS) {
+      // HLS 文件已设为公共读取，直接使用
+      setVideoUrl(video.src)
+    } else if (isOSSUrl) {
+      // 普通 MP4 仍需要签名URL
       fetchSignedUrl(video.src)
     } else {
       // 直接使用原URL（YouTube, Bilibili等）
