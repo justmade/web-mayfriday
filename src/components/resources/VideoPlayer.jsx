@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
-import ReactPlayer from 'react-player'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { HiPlay } from 'react-icons/hi'
+import Hls from 'hls.js'
 
 function VideoPlayer({ video }) {
   const { i18n } = useTranslation()
@@ -9,6 +8,8 @@ function VideoPlayer({ video }) {
   const [videoUrl, setVideoUrl] = useState(video.src)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const videoRef = useRef(null)
+  const hlsRef = useRef(null)
   const title = video.title && (i18n.language === 'zh' ? video.title : (video.titleEn || video.title))
 
   useEffect(() => {
@@ -25,7 +26,52 @@ function VideoPlayer({ video }) {
       // 直接使用原URL（YouTube, Bilibili等）
       setVideoUrl(video.src)
     }
+
+    // 清理函数
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy()
+        hlsRef.current = null
+      }
+    }
   }, [video.src])
+
+  // 当 videoUrl 更新后，初始化播放器
+  useEffect(() => {
+    if (!videoUrl || !videoRef.current) return
+
+    const isHLS = videoUrl.includes('.m3u8')
+
+    if (isHLS && Hls.isSupported()) {
+      // 使用 HLS.js 播放 HLS 视频
+      const hls = new Hls({
+        xhrSetup: function (xhr, url) {
+          // HLS 片段也需要签名，这里添加 crossOrigin
+          xhr.withCredentials = false
+        }
+      })
+
+      hls.loadSource(videoUrl)
+      hls.attachMedia(videoRef.current)
+
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        console.log('HLS 播放列表加载成功')
+      })
+
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        console.error('HLS 错误:', data)
+        if (data.fatal) {
+          setError('HLS 播放失败')
+        }
+      })
+
+      hlsRef.current = hls
+    } else if (isHLS && videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
+      // iOS Safari 原生支持 HLS
+      videoRef.current.src = videoUrl
+    }
+    // 普通 MP4 通过 src 属性自动加载
+  }, [videoUrl])
 
   const fetchSignedUrl = async (ossUrl) => {
     setIsLoading(true)
@@ -81,9 +127,10 @@ function VideoPlayer({ video }) {
             </div>
           </div>
         ) : videoUrl ? (
-          // 使用原生 video 标签（更稳定）
+          // 使用原生 video 标签（支持 HLS 和普通 MP4）
           <video
-            src={videoUrl}
+            ref={videoRef}
+            src={videoUrl.includes('.m3u8') ? undefined : videoUrl}
             controls
             crossOrigin="anonymous"
             playsInline

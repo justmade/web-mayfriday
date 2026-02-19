@@ -72,11 +72,11 @@ export const articles = [
       {
         type: "video",
         platform: "oss",
-        src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/resources/1/leopard-pouch-tutorial.mp4",
+        src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/resources/1/hls/playlist.m3u8",
         thumbnail: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/resources/1/leopard-pouch-thumbnail.jpg",
         duration: "19:10",
-        title: "豹纹笔袋完整教程 - 包底包身编织演示",
-        titleEn: "Leopard Pouch Complete Tutorial - Bottom and Body Demonstration"
+        title: "豹纹笔袋完整教程 - 包底包身编织演示（HLS）",
+        titleEn: "Leopard Pouch Complete Tutorial - Bottom and Body Demonstration (HLS)"
       },
       {
         type: "heading",
