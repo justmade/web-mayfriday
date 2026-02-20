@@ -63,9 +63,24 @@ function Activate() {
         setCountdown(60)  // Start 60 second countdown
         setError('')
 
-        // In development, show the code
+        // 如果是测试模式，显示验证码
+        // If in test mode, show the code
         if (data.devCode) {
-          alert(`[开发模式] 验证码: ${data.devCode}\n[Dev Mode] Code: ${data.devCode}`)
+          const message = data.testMode
+            ? `【测试模式】验证码：${data.devCode}\n\n未配置短信服务，验证码仅显示在此处\n\nTest Mode - SMS not configured\nVerification Code: ${data.devCode}`
+            : `[开发模式] 验证码: ${data.devCode}\n[Dev Mode] Code: ${data.devCode}`
+
+          alert(message)
+
+          // 同时在控制台打印
+          console.log('='.repeat(50))
+          console.log('验证码 / Verification Code:', data.devCode)
+          console.log('='.repeat(50))
+        } else {
+          // 真实短信已发送
+          alert(i18n.language === 'zh'
+            ? '验证码已发送到您的手机，请查看短信'
+            : 'Verification code sent to your phone via SMS')
         }
       } else {
         setError(data.error)

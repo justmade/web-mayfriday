@@ -70,15 +70,24 @@ export default async function handler(req, res) {
       lastSentAt: Date.now()
     }, 300)
 
-    // Return success (in development, include the code for testing)
+    // Return success
     const response = {
       success: true,
       message: '验证码已发送 / Verification code sent'
     }
 
-    // Only include code in development mode for testing
-    if (process.env.NODE_ENV === 'development') {
-      response.devCode = code  // Remove this in production!
+    // 如果没有配置阿里云短信，返回验证码用于测试
+    // If SMS service not configured, return code for testing
+    const smsConfigured = process.env.SMS_ACCESS_KEY_ID &&
+                          process.env.SMS_ACCESS_KEY_SECRET &&
+                          process.env.SMS_SIGN_NAME &&
+                          process.env.SMS_TEMPLATE_CODE
+
+    if (!smsConfigured) {
+      // 测试模式：直接返回验证码
+      response.devCode = code
+      response.testMode = true
+      console.log(`[TEST MODE] 验证码: ${code}`)
     }
 
     res.json(response)
