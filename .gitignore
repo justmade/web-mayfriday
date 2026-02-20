@@ -26,5 +26,6 @@ dist-ssr
 .vercel/
 .ossutilconfig
 ossutil
+ossutil_output/
 .env.local
 .env*.local

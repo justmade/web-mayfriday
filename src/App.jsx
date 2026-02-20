@@ -9,6 +9,10 @@ import ResourceDetail from './pages/ResourceDetail'
 import Membership from './pages/Membership'
 import Studio from './pages/Studio'
 import Gallery from './pages/Gallery'
+import Activate from './pages/Activate'
+import Login from './pages/Login'
+import MyCourses from './pages/MyCourses'
+import ProtectedRoute from './components/auth/ProtectedRoute'
 
 function App() {
   return (
@@ -24,6 +28,20 @@ function App() {
           <Route path="membership" element={<Membership />} />
           <Route path="studio" element={<Studio />} />
           <Route path="gallery" element={<Gallery />} />
+
+          {/* Authentication routes */}
+          <Route path="activate" element={<Activate />} />
+          <Route path="login" element={<Login />} />
+
+          {/* Protected routes */}
+          <Route
+            path="my-courses"
+            element={
+              <ProtectedRoute>
+                <MyCourses />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

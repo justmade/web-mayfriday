@@ -2,14 +2,21 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Navigation from './Navigation'
 import CartIcon from '../cart/CartIcon'
+import useAuthStore from '../../store/authStore'
 import { MdLanguage } from 'react-icons/md'
+import { HiUser, HiLogout } from 'react-icons/hi'
 
 function Header() {
   const { i18n } = useTranslation()
+  const { isLoggedIn, phone, logout } = useAuthStore()
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'zh' ? 'en' : 'zh'
     i18n.changeLanguage(newLang)
+  }
+
+  const handleLogout = () => {
+    logout()
   }
 
   return (
@@ -46,6 +53,41 @@ function Header() {
 
             {/* Cart icon */}
             <CartIcon />
+
+            {/* Authentication */}
+            {isLoggedIn ? (
+              <div className="hidden md:flex items-center space-x-3">
+                <Link
+                  to="/my-courses"
+                  className="flex items-center space-x-1 text-gray-700 hover:text-primary transition-colors"
+                >
+                  <HiUser size={20} />
+                  <span className="text-sm">{phone}</span>
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-1 text-gray-700 hover:text-red-600 transition-colors"
+                  title={i18n.language === 'zh' ? '退出登录' : 'Logout'}
+                >
+                  <HiLogout size={20} />
+                </button>
+              </div>
+            ) : (
+              <div className="hidden md:flex items-center space-x-3">
+                <Link
+                  to="/login"
+                  className="text-sm text-gray-700 hover:text-primary transition-colors font-medium"
+                >
+                  {i18n.language === 'zh' ? '登录' : 'Login'}
+                </Link>
+                <Link
+                  to="/activate"
+                  className="text-sm px-4 py-2 bg-primary text-white rounded-full hover:bg-opacity-90 transition font-medium"
+                >
+                  {i18n.language === 'zh' ? '激活课程' : 'Activate'}
+                </Link>
+              </div>
+            )}
 
             {/* Mobile navigation */}
             <div className="md:hidden">
