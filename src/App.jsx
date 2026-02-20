@@ -12,6 +12,7 @@ import Gallery from './pages/Gallery'
 import Activate from './pages/Activate'
 import Login from './pages/Login'
 import MyCourses from './pages/MyCourses'
+import AdminCodes from './pages/AdminCodes'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 
 function App() {
@@ -42,6 +43,9 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Admin routes */}
+          <Route path="admin/codes" element={<AdminCodes />} />
         </Route>
       </Routes>
     </BrowserRouter>
