@@ -19,16 +19,16 @@ function Activate() {
   const [success, setSuccess] = useState(false)
 
   const navigate = useNavigate()
-  const { login, isLoggedIn } = useAuthStore()
+  const { login, isLoggedIn, phone: loggedInPhone } = useAuthStore()
   const { t, i18n } = useTranslation()
 
-  // 注释掉重定向逻辑，允许已登录用户（如注册用户）访问激活页面
-  // Allow logged-in users (like registered users) to access activation page
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     navigate('/my-courses')
-  //   }
-  // }, [isLoggedIn])
+  // 如果用户已登录，自动使用当前登录账号的手机号
+  // If user is logged in, auto-fill with current account's phone number
+  useEffect(() => {
+    if (isLoggedIn && loggedInPhone) {
+      setPhone(loggedInPhone)
+    }
+  }, [isLoggedIn, loggedInPhone])
 
   // Countdown timer for SMS button
   useEffect(() => {
@@ -210,11 +210,18 @@ function Activate() {
                 placeholder={i18n.language === 'zh' ? '请输入手机号' : 'Enter phone number'}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition disabled:bg-gray-100 disabled:cursor-not-allowed"
                 required
-                disabled={success}
+                disabled={success || isLoggedIn}
                 maxLength={11}
               />
+              {isLoggedIn && (
+                <p className="text-xs text-gray-500 mt-1">
+                  {i18n.language === 'zh'
+                    ? '使用当前登录账号的手机号'
+                    : 'Using current account phone number'}
+                </p>
+              )}
             </div>
 
             {/* SMS Code + Send Button */}

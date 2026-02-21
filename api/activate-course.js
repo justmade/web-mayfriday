@@ -22,6 +22,29 @@ export default async function handler(req, res) {
   }
 
   try {
+    // 0. 如果用户已登录，验证手机号一致性 / If user is logged in, verify phone number matches
+    const authHeader = req.headers.authorization
+    if (authHeader) {
+      try {
+        const token = authHeader.replace('Bearer ', '')
+        const secret = process.env.JWT_SECRET || 'development-secret-key-change-in-production'
+        const decoded = jwt.verify(token, secret)
+
+        // 验证提交的手机号与登录账号的手机号一致
+        // Verify submitted phone matches logged-in account phone
+        if (decoded.phone !== phone) {
+          return res.status(400).json({
+            success: false,
+            error: '请使用当前登录账号的手机号激活课程 / Please use current account phone number to activate'
+          })
+        }
+      } catch (err) {
+        // Token 无效或过期，忽略（允许继续激活）
+        // Invalid or expired token, ignore (allow activation to proceed)
+        console.log('Token verification failed in activate-course:', err.message)
+      }
+    }
+
     // 1. 验证短信验证码 / Verify SMS code
     const smsData = await get(`sms:${phone}`)
 
