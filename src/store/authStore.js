@@ -20,7 +20,7 @@ const useAuthStore = create(
       login: (token, phone) => {
         set({
           token,
-          phone: phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'), // 脱敏显示 / Mask phone
+          phone, // 存储完整手机号 / Store full phone number
           isLoggedIn: true
         })
       },

@@ -62,7 +62,9 @@ function Header() {
                   className="flex items-center space-x-1 text-gray-700 hover:text-primary transition-colors"
                 >
                   <HiUser size={20} />
-                  <span className="text-sm">{phone}</span>
+                  <span className="text-sm">
+                    {phone ? phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : ''}
+                  </span>
                 </Link>
                 <button
                   onClick={handleLogout}

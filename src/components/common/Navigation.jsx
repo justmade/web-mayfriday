@@ -89,7 +89,9 @@ function Navigation() {
                       <HiUser className="mr-2" size={18} />
                       <span>{i18n.language === 'zh' ? '我的课程' : 'My Courses'}</span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1 ml-6">{phone}</div>
+                    <div className="text-xs text-gray-500 mt-1 ml-6">
+                      {phone ? phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : ''}
+                    </div>
                   </NavLink>
                 </li>
                 <li>
