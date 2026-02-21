@@ -44,7 +44,7 @@ export default async function handler(req, res) {
         })
       }
 
-      await set(`sms:${phone}`, smsData, \1)
+      await set(`sms:${phone}`, smsData, 300)
 
       return res.status(400).json({
         success: false,
@@ -102,7 +102,7 @@ export default async function handler(req, res) {
         deviceId,
         issuedAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + 30*24*60*60*1000).toISOString()
-      }, \1),
+      }, 30*24*60*60),
 
       // Delete SMS code
       del(`sms:${phone}`)
