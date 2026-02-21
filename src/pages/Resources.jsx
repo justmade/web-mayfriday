@@ -118,7 +118,7 @@ function Resources() {
 
                     {/* Read More Link */}
                     <Link
-                      to={`/resources/${article.id}`}
+                      to={`/resources/${article.slug}`}
                       className="inline-block mt-4 text-primary font-medium hover:text-secondary transition-colors"
                     >
                       {i18n.language === 'zh' ? '阅读全文' : 'Read More'} →
