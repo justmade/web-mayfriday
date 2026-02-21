@@ -88,12 +88,16 @@ export default async function handler(req, res) {
     let user = await get(`user:${phone}`)
 
     if (!user) {
+      // 新用户（通过激活码直接创建）
+      // New user (created via activation)
       user = {
         phone,
         courses: [],
         createdAt: new Date().toISOString()
       }
     }
+    // 如果用户已存在（可能是注册用户），保留原有属性
+    // If user exists (may be registered user), preserve existing properties
 
     // 4. 添加课程到用户账户 / Add course to user account
     if (!user.courses.includes(codeData.courseId)) {

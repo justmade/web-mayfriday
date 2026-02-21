@@ -1,6 +1,6 @@
 /**
- * 登录 API
- * User login with phone and SMS code
+ * 用户注册 API
+ * User registration with phone and SMS verification
  */
 
 import { get, set, del } from './_redis.js'
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
         })
       }
 
-      await set(`sms:${phone}`, smsData, \1)
+      await set(`sms:${phone}`, smsData, 300)
 
       return res.status(400).json({
         success: false,
@@ -59,17 +59,28 @@ export default async function handler(req, res) {
       })
     }
 
-    // 2. 检查用户是否存在 / Check if user exists
-    const user = await get(`user:${phone}`)
+    // 2. 检查用户是否已存在 / Check if user already exists
+    const existingUser = await get(`user:${phone}`)
 
-    if (!user) {
-      return res.status(404).json({
+    if (existingUser) {
+      return res.status(400).json({
         success: false,
-        error: '用户不存在，请先注册或激活课程 / User not found, please register or activate a course first'
+        error: '该手机号已注册，请直接登录 / Phone number already registered, please login'
       })
     }
 
-    // 3. 生成JWT令牌（30天有效）/ Generate JWT token (30 days)
+    // 3. 创建新用户 / Create new user
+    const user = {
+      phone,
+      courses: [],  // 空课程列表
+      registered: true,  // 标记为注册用户
+      currentDevice: deviceId,
+      deviceName,
+      createdAt: new Date().toISOString(),
+      lastLoginAt: new Date().toISOString()
+    }
+
+    // 4. 生成JWT令牌（30天有效）/ Generate JWT token (30 days)
     const secret = process.env.JWT_SECRET || 'development-secret-key-change-in-production'
     const token = jwt.sign(
       {
@@ -80,18 +91,10 @@ export default async function handler(req, res) {
       { expiresIn: '30d' }
     )
 
-    // 4. 更新用户数据（单设备限制）/ Update user (single device restriction)
-    if (user.currentToken) {
-      // 删除旧设备的令牌 / Delete old device token
-      await del(`token:${user.currentToken}`)
-    }
-
-    user.currentDevice = deviceId
-    user.deviceName = deviceName
+    // 5. 更新用户令牌信息 / Update user token
     user.currentToken = token
-    user.lastLoginAt = new Date().toISOString()
 
-    // 5. 保存数据 / Save data
+    // 6. 保存数据 / Save data
     await Promise.all([
       // Save user data
       set(`user:${phone}`, user),
@@ -102,25 +105,24 @@ export default async function handler(req, res) {
         deviceId,
         issuedAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + 30*24*60*60*1000).toISOString()
-      }, \1),
+      }, 30*24*60*60),
 
       // Delete SMS code
       del(`sms:${phone}`)
     ])
 
-    // 6. 返回成功响应 / Return success response
+    // 7. 返回成功响应 / Return success response
     res.json({
       success: true,
       token,
-      courses: user.courses,
-      message: '登录成功 / Login successful'
+      message: '注册成功 / Registration successful'
     })
 
   } catch (error) {
-    console.error('Login error:', error)
+    console.error('Register error:', error)
     res.status(500).json({
       success: false,
-      error: '登录失败，请重试 / Login failed, please try again'
+      error: '注册失败，请重试 / Registration failed, please try again'
     })
   }
 }

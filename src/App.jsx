@@ -11,6 +11,7 @@ import Studio from './pages/Studio'
 import Gallery from './pages/Gallery'
 import Activate from './pages/Activate'
 import Login from './pages/Login'
+import Register from './pages/Register'
 import MyCourses from './pages/MyCourses'
 import AdminCodes from './pages/AdminCodes'
 import ProtectedRoute from './components/auth/ProtectedRoute'
@@ -33,6 +34,7 @@ function App() {
           {/* Authentication routes */}
           <Route path="activate" element={<Activate />} />
           <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
 
           {/* Protected routes */}
           <Route

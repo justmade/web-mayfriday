@@ -81,6 +81,12 @@ function Header() {
                   {i18n.language === 'zh' ? '登录' : 'Login'}
                 </Link>
                 <Link
+                  to="/register"
+                  className="text-sm text-gray-700 hover:text-primary transition-colors font-medium"
+                >
+                  {i18n.language === 'zh' ? '注册' : 'Register'}
+                </Link>
+                <Link
                   to="/activate"
                   className="text-sm px-4 py-2 bg-primary text-white rounded-full hover:bg-opacity-90 transition font-medium"
                 >

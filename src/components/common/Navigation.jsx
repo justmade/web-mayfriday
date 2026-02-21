@@ -115,6 +115,15 @@ function Navigation() {
                 </li>
                 <li>
                   <NavLink
+                    to="/register"
+                    onClick={() => setIsOpen(false)}
+                    className="block px-4 py-3 hover:bg-cream transition-colors text-gray-700"
+                  >
+                    {i18n.language === 'zh' ? '注册' : 'Register'}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
                     to="/activate"
                     onClick={() => setIsOpen(false)}
                     className="block px-4 py-3 bg-primary text-white hover:bg-opacity-90 transition-colors font-medium text-center rounded-lg mx-2 my-1"
