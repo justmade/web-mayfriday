@@ -22,12 +22,13 @@ function Activate() {
   const { login, isLoggedIn } = useAuthStore()
   const { t, i18n } = useTranslation()
 
-  // Redirect if already logged in
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/my-courses')
-    }
-  }, [isLoggedIn])
+  // 注释掉重定向逻辑，允许已登录用户（如注册用户）访问激活页面
+  // Allow logged-in users (like registered users) to access activation page
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     navigate('/my-courses')
+  //   }
+  // }, [isLoggedIn])
 
   // Countdown timer for SMS button
   useEffect(() => {
