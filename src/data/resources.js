@@ -943,7 +943,7 @@ export const articles = [
       },
       {
         type: "text",
-        content: "底边的横向缝合是从第一列开始的，注意要贴近边缘的最底部针目。缝合规律是：**先穿过一侧底部的V字形针目，然后再穿过对面的反向八字形针目**。不断重复"先穿V再穿反向八字形"的步骤并随时抽紧线。底边缝合完毕后，转回侧面确认两边针目对齐，最后将线拉到反面进行收针并把预留的线头藏好。",
+        content: "底边的横向缝合是从第一列开始的，注意要贴近边缘的最底部针目。缝合规律是：**先穿过一侧底部的V字形针目，然后再穿过对面的反向八字形针目**。不断重复'先穿V再穿反向八字形'的步骤并随时抽紧线。底边缝合完毕后，转回侧面确认两边针目对齐，最后将线拉到反面进行收针并把预留的线头藏好。",
         contentEn: "The horizontal seaming of the bottom edge starts from the first row - be sure to stay close to the very bottom stitches at the edge. The seaming pattern is: **first pass through the V-shaped stitch at the bottom of one side, then through the reverse figure-eight stitch on the opposite side**. Keep repeating 'V then reverse figure-eight' and pull the yarn tight as you go. After completing the bottom seam, turn back to check that the stitches on both sides are aligned, then bring the yarn to the wrong side to fasten off and weave in the ends."
       },
       {
