@@ -856,7 +856,7 @@ export const articles = [
       {
         type: "video",
         platform: "oss",
-        src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/resources/mini-heddle-latvia-pattern/hls/playlist.m3u8",
+        src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/resources/mini-heddle-latvia-pattern/playlist.m3u8",
         thumbnail: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/resources/mini-heddle-latvia-pattern/thumbnail.jpg",
         duration: "10:25",
         title: "MINI HEDDLE 提花编织完整演示",
