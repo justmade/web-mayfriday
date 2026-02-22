@@ -636,6 +636,260 @@ export const articles = [
       }
     ]
   },
+  {
+    id: 9,
+    slug: "mini-heddle-latvia-pattern",
+    title: "【提花教程】MINI HEDDLE 迷你织布板 - 拉脱维亚提花编织",
+    titleEn: "[Pattern Weaving] MINI HEDDLE - Latvia Pattern Tutorial",
+    category: "tutorial",
+    author: "五月的星期五",
+    authorEn: "May Friday",
+    date: "2026-02-22",
+    readTime: "25分钟",
+    readTimeEn: "25 min read",
+    image: "/images/resources/mini-heddle-latvia-pattern/cover.png",
+    excerpt: "详细讲解使用迷你织布板进行拉脱维亚提花编织的完整流程，包含线材准备、穿线固定、提花规律掌握等核心步骤，适合有一定编织基础的学习者进阶学习。",
+    excerptEn: "Complete guide to Latvia pattern weaving with mini heddle, including material preparation, threading, pattern rules and techniques. Suitable for intermediate learners with basic weaving experience.",
+    tags: ["提花", "织布板", "MINI HEDDLE", "拉脱维亚编织"],
+    tagsEn: ["pattern weaving", "heddle", "band weaving", "latvia"],
+    contentBlocks: [
+      {
+        type: "text",
+        content: "迷你织布板（MINI HEDDLE）是一种便携式的编织工具，特别适合制作窄幅织带、挂绳等精致小物。这篇教程将带您学习拉脱维亚传统提花编织技法，掌握双面花样的编织秘诀。",
+        contentEn: "MINI HEDDLE is a portable weaving tool, perfect for creating narrow bands, straps and delicate accessories. This tutorial will teach you traditional Latvia pattern weaving techniques and master the secrets of double-sided patterns."
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "第一步：准备线材",
+        contentEn: "Step 1: Prepare Materials"
+      },
+      {
+        type: "list",
+        ordered: false,
+        items: [
+          {
+            content: "需要准备两种粗细的线材：6号蕾丝线（如珍珠白、蓝染的深蓝色）和3号蕾丝线（如红色）",
+            contentEn: "Prepare two types of yarn: No.6 lace yarn (such as pearl white, deep blue) and No.3 lace yarn (such as red)"
+          },
+          {
+            content: "根据图解取线，蓝色的线需要取双股。由于3号红线本身就比6号蕾丝线粗两倍，因此红线不需要双股，取单股即可",
+            contentEn: "Follow the pattern diagram, blue yarn needs to be doubled. Since No.3 red yarn is already twice as thick as No.6 lace yarn, red yarn should be used as single strand"
+          }
+        ]
+      },
+      {
+        type: "callout",
+        style: "info",
+        content: "ℹ️ 线材的粗细搭配非常重要，双股6号线和单股3号线的粗细基本一致，这样才能编织出整齐的提花图案。",
+        contentEn: "ℹ️ The thickness matching of yarns is very important. Doubled No.6 yarn and single No.3 yarn have similar thickness, which ensures neat pattern weaving."
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "第二步：穿线与固定",
+        contentEn: "Step 2: Threading and Fixing"
+      },
+      {
+        type: "list",
+        ordered: false,
+        items: [
+          {
+            content: "将编织板夹在桌边，严格按照图解上的颜色和孔位顺序穿线",
+            contentEn: "Clamp the heddle to the table edge, thread according to the color and hole sequence in the diagram"
+          },
+          {
+            content: "穿线完成后，用纸板或绳子来回梳理线材，确保每一根经线都处于紧绷、笔直的状态",
+            contentEn: "After threading, use cardboard or string to comb the threads back and forth, ensuring each warp thread is taut and straight"
+          },
+          {
+            content: "将整理好的线尾打一个结，然后把这团线扣在自己的腰带上固定好",
+            contentEn: "Tie a knot at the end of the organized threads, then fasten the bundle to your belt"
+          }
+        ]
+      },
+      {
+        type: "image",
+        src: "/images/resources/mini-heddle-latvia-pattern/p1.png",
+        alt: "穿线与固定示意图",
+        altEn: "Threading and fixing illustration",
+        caption: "严格按照图解穿线，确保线材紧绷笔直",
+        captionEn: "Thread strictly according to diagram, ensure threads are taut and straight"
+      },
+      {
+        type: "callout",
+        style: "warning",
+        content: "⚠️ 穿线顺序和张力控制是成功的关键。如果经线松紧不一，会导致提花图案扭曲变形。",
+        contentEn: "⚠️ Threading sequence and tension control are key to success. Uneven warp tension will cause pattern distortion."
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "第三步：编织基础平纹",
+        contentEn: "Step 3: Weave Base Plain Weave"
+      },
+      {
+        type: "text",
+        content: "在正式开始提花之前，需要先织一段平纹作为基础。这段平纹不仅能稳定经线，还能作为作品的开始部分，通常需要织3-5厘米。",
+        contentEn: "Before starting pattern weaving, weave a plain weave section as foundation. This plain weave stabilizes the warp and serves as the beginning of your work, typically 3-5cm."
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "第四步：掌握提花规律",
+        contentEn: "Step 4: Master Pattern Rules"
+      },
+      {
+        type: "text",
+        content: "这款提花图案非常简单，整体是六行一组的循环，每个颜色连续显示三行。在这六行的循环当中，只有两行需要手动去变动提花线的位置，其余行正常上下拨动织板即可。",
+        contentEn: "This pattern is quite simple - it's a 6-row repeat cycle, with each color showing for 3 consecutive rows. In this 6-row cycle, only 2 rows require manual adjustment of pattern threads, the rest just need normal heddle movement."
+      },
+      {
+        type: "image",
+        src: "/images/resources/mini-heddle-latvia-pattern/p2.png",
+        alt: "提花规律示意图",
+        altEn: "Pattern rule illustration",
+        caption: "六行一组的提花循环规律",
+        captionEn: "6-row pattern repeat cycle"
+      },
+      {
+        type: "callout",
+        style: "tip",
+        content: "💡 理解提花的规律性是关键。只要掌握了六行循环的节奏，整个编织过程就会变得轻松自如。",
+        contentEn: "💡 Understanding pattern regularity is key. Once you master the 6-row rhythm, the entire weaving process becomes smooth and natural."
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "第五步：提花具体操作（以蓝红交替为例）",
+        contentEn: "Step 5: Detailed Pattern Operation (Blue-Red Example)"
+      },
+      {
+        type: "heading",
+        level: 3,
+        content: "显示蓝色提花",
+        contentEn: "Showing Blue Pattern"
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          {
+            content: "当织板上提、梭子从右往左穿时，如果上层显示的是红线，需要手动将这两组红线下压",
+            contentEn: "When heddle lifts up and shuttle passes from right to left, if red threads show on top, manually press down these two groups of red threads"
+          },
+          {
+            content: "手指伸到下层，把两组蓝色的线提上来（保持白线位置不动），接着继续把其余的红线下压，然后穿过梭子",
+            contentEn: "Reach fingers underneath, lift up two groups of blue threads (keep white threads in place), continue pressing down remaining red threads, then pass the shuttle"
+          },
+          {
+            content: "下一行下压织板时，蓝色提花本身就在上层，不需要做任何拨线操作，直接穿梭子即可",
+            contentEn: "Next row when pressing heddle down, blue pattern is already on top, no thread manipulation needed, just pass the shuttle"
+          }
+        ]
+      },
+      {
+        type: "heading",
+        level: 3,
+        content: "显示红色提花",
+        contentEn: "Showing Red Pattern"
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          {
+            content: "织完三行蓝色后换红色。红色的第一行不需要做任何动作，因为它本来就是红色的提花行",
+            contentEn: "After weaving three blue rows, switch to red. First red row needs no action as it's already a red pattern row"
+          },
+          {
+            content: "到了下一行（原本会显现蓝色时），需要把下层的两根红线提上来，将两根蓝线压下去，再把红线提上来，穿过梭子",
+            contentEn: "Next row (which would normally show blue), lift up two red threads from below, press down two blue threads, lift red threads up, pass the shuttle"
+          },
+          {
+            content: "再往上一行同样无需任何动作",
+            contentEn: "Following row again needs no action"
+          }
+        ]
+      },
+      {
+        type: "heading",
+        level: 3,
+        content: "进阶技巧（使用梭子挑线）",
+        contentEn: "Advanced Technique (Picking with Shuttle)"
+      },
+      {
+        type: "text",
+        content: "当熟练后可以用梭子代替手指来挑线。将梭子侧过来一点，让梭子边缘和经线保持平行状态穿入，这样可以避免勾住经线，提高编织效率。",
+        contentEn: "Once proficient, you can use the shuttle instead of fingers to pick threads. Tilt the shuttle slightly so its edge stays parallel to the warp threads while passing through, avoiding catching the warp and improving weaving efficiency."
+      },
+      {
+        type: "image",
+        src: "/images/resources/mini-heddle-latvia-pattern/p3.png",
+        alt: "梭子挑线技巧",
+        altEn: "Shuttle picking technique",
+        caption: "使用梭子挑线的正确姿势",
+        captionEn: "Correct posture for picking with shuttle"
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "第六步：收尾工作",
+        contentEn: "Step 6: Finishing"
+      },
+      {
+        type: "text",
+        content: "编织到大收尾的地方，使用穿线工具从侧面穿过来，接下压织板，将线尾从线圈里面穿过，拉紧后剪断即可。这种收尾方法简单牢固，不易松脱。",
+        contentEn: "When reaching the end, use a threading tool to pass from the side, press the heddle down, thread the yarn end through the loop, pull tight and cut. This finishing method is simple, secure and won't come loose."
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "完整视频教程",
+        contentEn: "Complete Video Tutorial"
+      },
+      {
+        type: "text",
+        content: "以下视频详细演示了从准备到完成的完整编织过程，建议边看边跟着操作，暂停和回放功能可以帮助您更好地理解每个细节步骤。",
+        contentEn: "The following video demonstrates the complete weaving process from preparation to finish. We recommend watching while practicing - use pause and replay to better understand each detailed step."
+      },
+      {
+        type: "video",
+        platform: "oss",
+        src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/resources/mini-heddle-latvia-pattern/hls/playlist.m3u8",
+        thumbnail: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/resources/mini-heddle-latvia-pattern/thumbnail.jpg",
+        duration: "10:25",
+        title: "MINI HEDDLE 提花编织完整演示",
+        titleEn: "MINI HEDDLE Pattern Weaving Complete Demo"
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "作品特点参考",
+        contentEn: "Work Features Reference"
+      },
+      {
+        type: "list",
+        ordered: false,
+        items: [
+          {
+            content: "该图样是双面图案，正反面一模一样，可以作为挂绳、手机绳等双面展示的作品",
+            contentEn: "This pattern is double-sided - front and back are identical, perfect for lanyards, phone straps and other double-sided display items"
+          },
+          {
+            content: "如果取大约60厘米长度的线进行编织，可以织出两段，中间不断开对折起来，正好是一根挂绳的长度",
+            contentEn: "If you use about 60cm of thread for weaving, you can weave two sections, fold them in the middle without breaking - perfect length for a lanyard"
+          }
+        ]
+      },
+      {
+        type: "callout",
+        style: "success",
+        content: "✅ 恭喜！完成这个作品后，您已经掌握了拉脱维亚提花编织的基本技法，可以尝试更复杂的花样组合了。",
+        contentEn: "✅ Congratulations! After completing this work, you've mastered the basic techniques of Latvia pattern weaving and can try more complex pattern combinations."
+      }
+    ]
+  },
 ]
 
 export const resourceCategories = [
