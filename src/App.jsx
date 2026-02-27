@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom'
 import MainLayout from './components/layout/MainLayout'
 import Home from './pages/Home'
 import Courses from './pages/Courses'
@@ -15,6 +15,13 @@ import Register from './pages/Register'
 import MyCourses from './pages/MyCourses'
 import AdminCodes from './pages/AdminCodes'
 import ProtectedRoute from './components/auth/ProtectedRoute'
+import CourseOverview from './pages/CourseOverview'
+import LessonDetail from './pages/LessonDetail'
+
+function CourseProtected({ children }) {
+  const { courseId } = useParams()
+  return <ProtectedRoute courseId={courseId}>{children}</ProtectedRoute>
+}
 
 function App() {
   return (
@@ -43,6 +50,24 @@ function App() {
               <ProtectedRoute>
                 <MyCourses />
               </ProtectedRoute>
+            }
+          />
+
+          {/* Course detail routes - protected */}
+          <Route
+            path="courses/:courseId"
+            element={
+              <CourseProtected>
+                <CourseOverview />
+              </CourseProtected>
+            }
+          />
+          <Route
+            path="courses/:courseId/lessons/:lessonIndex"
+            element={
+              <CourseProtected>
+                <LessonDetail />
+              </CourseProtected>
             }
           />
 
