@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { courses } from '../data/courses'
 import Card from '../components/common/Card'
@@ -78,9 +79,18 @@ function Courses() {
                       <span className="text-2xl font-bold text-primary">
                         ¥{course.price}
                       </span>
-                      <button className="bg-primary text-white px-8 py-2.5 rounded-full hover:bg-opacity-90 hover:shadow-lg transition-all font-medium">
-                        {t('courses.enroll')}
-                      </button>
+                      {course.courseId ? (
+                        <Link
+                          to={`/courses/${course.courseId}`}
+                          className="bg-primary text-white px-8 py-2.5 rounded-full hover:bg-opacity-90 hover:shadow-lg transition-all font-medium"
+                        >
+                          {i18n.language === 'zh' ? '进入课程' : 'Enter Course'}
+                        </Link>
+                      ) : (
+                        <button className="bg-primary text-white px-8 py-2.5 rounded-full hover:bg-opacity-90 hover:shadow-lg transition-all font-medium">
+                          {t('courses.enroll')}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </Card>

@@ -1,5 +1,32 @@
 export const courses = [
   {
+    id: "course1",
+    courseId: "course1",
+    title: "卡织入门课程",
+    titleEn: "Card Weaving Beginner Course",
+    description: "从零开始学习卡织，掌握工具使用、线材选择、穿线方向等核心知识，跟随视频完成第一件作品。",
+    descriptionEn: "Learn card weaving from scratch — tools, yarn selection, threading direction, and complete your first piece.",
+    image: "/images/courses/course1/封面.jpg",
+    difficulty: "beginner",
+    duration: "自定进度",
+    durationEn: "Self-paced",
+    sessions: "9节课",
+    sessionsEn: "9 lessons",
+    price: 0,
+    highlights: [
+      "卡织历史与工具介绍",
+      "S/Z穿线方向详解",
+      "线材选择指南",
+      "3节完整视频演示",
+    ],
+    highlightsEn: [
+      "History & tool introduction",
+      "S/Z threading direction",
+      "Yarn selection guide",
+      "3 full video demos",
+    ],
+  },
+  {
     id: 1,
     title: "基础编织入门课程",
     titleEn: "Basic Knitting Foundation",
