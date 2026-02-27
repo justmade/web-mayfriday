@@ -15,7 +15,7 @@ function AdminCodes() {
 
   // 创建新激活码的表单
   const [newCode, setNewCode] = useState('')
-  const [courseId, setCourseId] = useState('1')
+  const [courseId, setCourseId] = useState('course1')
 
   /**
    * 登录验证
@@ -68,7 +68,7 @@ function AdminCodes() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           code: newCode.toUpperCase(),
-          courseId: parseInt(courseId),
+          courseId: courseId,
           adminPassword: password
         })
       })
@@ -272,11 +272,7 @@ function AdminCodes() {
                   onChange={(e) => setCourseId(e.target.value)}
                   className="w-full border border-gray-300 rounded-lg px-4 py-3"
                 >
-                  <option value="1">1 - 基础编织入门</option>
-                  <option value="2">2 - 围巾编织专项</option>
-                  <option value="3">3 - 帽子编织课程</option>
-                  <option value="4">4 - 手套编织课程</option>
-                  <option value="5">5 - 毛衣编织进阶</option>
+                  <option value="course1">course1 - 卡织入门课程</option>
                 </select>
               </div>
             </div>

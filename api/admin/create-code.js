@@ -51,7 +51,7 @@ export default async function handler(req, res) {
 
     // 创建激活码数据
     const codeData = {
-      courseId: parseInt(courseId),
+      courseId: courseId,
       used: false,
       usedBy: null,
       createdAt: new Date().toISOString(),
