@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useParams, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import MainLayout from './components/layout/MainLayout'
 import Home from './pages/Home'
 import Courses from './pages/Courses'
@@ -18,6 +19,12 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import CourseOverview from './pages/CourseOverview'
 import LessonDetail from './pages/LessonDetail'
 
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
+
 function CourseProtected({ children }) {
   const { courseId } = useParams()
   return <ProtectedRoute courseId={courseId}>{children}</ProtectedRoute>
@@ -26,6 +33,7 @@ function CourseProtected({ children }) {
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
