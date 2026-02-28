@@ -219,21 +219,13 @@ export const course1Data = {
       titleEn: "Theory Video",
       contentBlocks: [
         {
-          type: "text",
-          content: "点击缩略图即可打开视频链接",
-          contentEn: "Click the thumbnail to open the video link"
-        },
-        {
-          type: "callout",
-          style: "info",
-          content: "提取码：byqr",
-          contentEn: "Access code: byqr"
-        },
-        {
-          type: "videoLink",
-          thumbnail: "/images/courses/course1/理论知识视频.png",
-          label: "点击观看理论知识视频（提取码：byqr）",
-          labelEn: "Click to watch theory video (access code: byqr)",
+          type: "video",
+          platform: "oss",
+          src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/playlist.m3u8",
+          thumbnail: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/thumbnail.jpg",
+          duration: "16:25",
+          title: "理论知识视频",
+          titleEn: "Theory Video",
         },
       ],
     },
@@ -243,15 +235,13 @@ export const course1Data = {
       titleEn: "Start Weaving Video",
       contentBlocks: [
         {
-          type: "text",
-          content: "点击缩略图即可打开视频链接",
-          contentEn: "Click the thumbnail to open the video link"
-        },
-        {
-          type: "videoLink",
-          thumbnail: "/images/courses/course1/开始编织视频.jpeg",
-          label: "点击观看开始编织视频",
-          labelEn: "Click to watch start weaving video",
+          type: "video",
+          platform: "oss",
+          src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/playlist.m3u8",
+          thumbnail: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/thumbnail.jpg",
+          duration: "16:25",
+          title: "开始编织视频",
+          titleEn: "Start Weaving Video",
         },
       ],
     },
@@ -261,15 +251,13 @@ export const course1Data = {
       titleEn: "Bracelet Making Video",
       contentBlocks: [
         {
-          type: "text",
-          content: "点击缩略图即可打开视频链接",
-          contentEn: "Click the thumbnail to open the video link"
-        },
-        {
-          type: "videoLink",
-          thumbnail: "/images/courses/course1/手链制作视频.jpeg",
-          label: "点击观看手链制作视频",
-          labelEn: "Click to watch bracelet making video",
+          type: "video",
+          platform: "oss",
+          src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/playlist.m3u8",
+          thumbnail: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/thumbnail.jpg",
+          duration: "16:25",
+          title: "手链制作视频",
+          titleEn: "Bracelet Making Video",
         },
       ],
     },
