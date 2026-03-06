@@ -15,7 +15,7 @@ const resources = {
       },
       home: {
         hero: {
-          title: '五月的星期五手工坊',
+          title: 'Mayin Friday Handicraft Studio',
           subtitle: '传统编织艺术，现代生活美学',
           cta: '探索更多',
         },
@@ -66,7 +66,7 @@ const resources = {
         title: '工作室介绍',
         story: {
           title: '我们的故事',
-          content: '五月的星期五手工坊创立于2020年，源于对传统编织艺术的热爱。我们相信，每一件手工作品都承载着创作者的情感和故事。在这里，我们不仅教授编织技艺，更希望传递慢生活的美学理念。',
+          content: 'Mayin Friday Handicraft Studio was founded in 2020, born from a love of traditional weaving arts. We believe every handmade piece carries the creator\'s emotions and stories. Here, we not only teach weaving techniques, but also hope to convey the aesthetics of slow living.',
         },
         philosophy: {
           title: '理念',
@@ -114,7 +114,7 @@ const resources = {
       },
       home: {
         hero: {
-          title: 'May Friday Handicraft Studio',
+          title: 'Mayin Friday Handicraft Studio',
           subtitle: 'Traditional Weaving Art, Modern Living Aesthetics',
           cta: 'Explore More',
         },
@@ -165,7 +165,7 @@ const resources = {
         title: 'About Studio',
         story: {
           title: 'Our Story',
-          content: 'May Friday Handicraft Studio was founded in 2020, born from a passion for traditional weaving arts. We believe every handmade piece carries the emotions and stories of its creator. Here, we not only teach weaving techniques but also hope to convey the aesthetics of slow living.',
+          content: 'Mayin Friday Handicraft Studio was founded in 2020, born from a passion for traditional weaving arts. We believe every handmade piece carries the emotions and stories of its creator. Here, we not only teach weaving techniques but also hope to convey the aesthetics of slow living.',
         },
         philosophy: {
           title: 'Philosophy',

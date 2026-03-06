@@ -26,7 +26,7 @@ function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="text-2xl md:text-3xl font-bold text-primary">
-              {i18n.language === 'zh' ? '五月的星期五' : 'May Friday'}
+              Mayin Friday
             </div>
           </Link>
 

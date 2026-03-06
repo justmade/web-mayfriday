@@ -12,7 +12,7 @@ function Footer() {
           {/* About */}
           <div>
             <h3 className="text-xl font-bold text-white mb-4">
-              {i18n.language === 'zh' ? '五月的星期五手工坊' : 'May Friday Handicraft'}
+              Mayin Friday Handicraft
             </h3>
             <p className="text-sm leading-relaxed">
               {i18n.language === 'zh'
@@ -79,7 +79,7 @@ function Footer() {
         <div className="border-t border-gray-800 mt-8 pt-6 text-center text-sm">
           <p>
             © {new Date().getFullYear()}{' '}
-            {i18n.language === 'zh' ? '五月的星期五手工坊' : 'May Friday Handicraft'}.
+            Mayin Friday Handicraft.
             {i18n.language === 'zh' ? ' 版权所有' : ' All rights reserved'}.
           </p>
         </div>
