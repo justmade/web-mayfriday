@@ -10,8 +10,8 @@ export const course1Data = {
   duration: "自定进度",
   durationEn: "Self-paced",
   galleryImages: [
-    "/images/courses/course1/什么是卡织-1.png",
-    "/images/courses/course1/工具介绍-卡片与梭子-1.jpeg",
+    "/images/courses/course1/intro-1.jpg",
+    "/images/courses/course1/intro-2.jpg",
     "/images/courses/course1/S-Z穿线方向说明.png",
     "/images/courses/course1/线材介绍.png",
   ],
@@ -347,6 +347,29 @@ export const course1Data = {
           duration: "16:25",
           title: "手链制作完整演示",
           titleEn: "Bracelet Making Full Demonstration",
+        },
+      ],
+    },
+
+    // ── Lesson 9：图解汇总附件 ────────────────────────────────────
+    {
+      index: 9,
+      title: "课程图解汇总",
+      titleEn: "Course Pattern Reference",
+      contentBlocks: [
+        {
+          type: "text",
+          content: "以下是课程中所有图解的汇总文件，包含 S/Z 穿线方向、经典图案排列等参考资料，可下载后对照使用。",
+          contentEn: "Below is the complete pattern reference file for this course, including S/Z threading diagrams and classic pattern charts. Download and keep it handy while weaving.",
+        },
+        {
+          type: "attachment",
+          src: "/files/courses/course1/卡织课程图解汇总.pdf",
+          filename: "卡织课程图解汇总.pdf",
+          label: "卡织课程图解汇总.pdf",
+          labelEn: "Card Weaving Pattern Reference.pdf",
+          description: "课程配套图解资料，PDF 格式",
+          descriptionEn: "Course pattern reference, PDF format",
         },
       ],
     },
