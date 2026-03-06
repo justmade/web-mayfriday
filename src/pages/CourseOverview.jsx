@@ -56,6 +56,17 @@ function CourseOverview() {
           <p className="text-gray-700 leading-relaxed text-lg">{description}</p>
         </div>
 
+        {/* Intro Images (portrait, 2-column) */}
+        {course.introImages?.length > 0 && (
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            {course.introImages.map((src, i) => (
+              <div key={i} className="rounded-lg overflow-hidden aspect-[3/4]">
+                <img src={src} alt="" className="w-full h-full object-cover" loading="lazy" />
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Gallery */}
         {course.galleryImages?.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">

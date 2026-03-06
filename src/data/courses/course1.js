@@ -9,11 +9,15 @@ export const course1Data = {
   difficultyEn: "Beginner",
   duration: "自定进度",
   durationEn: "Self-paced",
-  galleryImages: [
+  introImages: [
     "/images/courses/course1/intro-1.jpg",
     "/images/courses/course1/intro-2.jpg",
+  ],
+  galleryImages: [
     "/images/courses/course1/S-Z穿线方向说明.png",
     "/images/courses/course1/线材介绍.png",
+    "/images/courses/course1/什么是卡织-1.png",
+    "/images/courses/course1/工具介绍-卡片与梭子-1.jpeg",
   ],
   lessons: [
     // ── Lesson 0：什么是卡织 ──────────────────────────────────────
