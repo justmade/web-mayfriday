@@ -29,9 +29,6 @@ export async function sendSmsCode(phone) {
     SignName: process.env.SMS_SIGN_NAME,
     TemplateCode: process.env.SMS_TEMPLATE_CODE,
     TemplateParam: JSON.stringify({ min: '5' }),
-    CodeLength: 6,
-    ValidTime: 300,
-    Interval: 60,
   }, { method: 'POST' })
   if (result.Code !== 'OK') throw new Error(result.Message)
   return result.Model.BizId
