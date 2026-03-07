@@ -1,24 +1,15 @@
 /**
- * 统一短信验证入口
- * Unified SMS verification — production uses Alibaba Cloud PNVS,
- * test mode falls back to Redis-stored codes.
+ * 统一短信验证入口（生产/测试模式均从 Redis 比对）
+ * PNVS 只负责发送短信，code 始终由调用方生成并存储在 Redis 中。
  */
 
 import { get, set, del } from './_redis.js'
-import { isSmsConfigured, checkSmsCode } from './_sms.js'
 
 /**
  * 验证短信验证码
  * @returns {Promise<true|string>} true 表示成功，字符串为错误信息
  */
 export async function verifySmsCode(phone, code) {
-  if (isSmsConfigured()) {
-    // 生产模式：调用阿里云 PNVS 核验
-    const passed = await checkSmsCode(phone, code)
-    return passed ? true : '验证码错误或已过期 / Code incorrect or expired'
-  }
-
-  // 测试模式：从 Redis 读取比对
   const smsData = await get(`sms:${phone}`)
 
   if (!smsData) {

@@ -42,24 +42,25 @@ export default async function handler(req, res) {
       message: '验证码已发送 / Verification code sent'
     }
 
+    // 生成验证码，无论生产/测试模式都存入 Redis
+    const code = Math.floor(100000 + Math.random() * 900000).toString()
+
     if (isSmsConfigured()) {
-      // 生产模式：阿里云 PNVS 发送并托管验证码，无需本地存储
-      await sendSmsCode(phone)
-      // 仍需记录 lastSentAt 用于防刷限制
-      await set(`sms:${phone}`, { lastSentAt: Date.now() }, 300)
+      // 生产模式：PNVS 发送短信，code 同时存 Redis 用于验证
+      await sendSmsCode(phone, code)
     } else {
-      // 测试模式：生成验证码存 Redis，返回 devCode
-      const code = Math.floor(100000 + Math.random() * 900000).toString()
-      await set(`sms:${phone}`, {
-        code,
-        expiresAt: Date.now() + 300000,  // 5 minutes
-        attempts: 0,
-        lastSentAt: Date.now()
-      }, 300)
+      // 测试模式：不发真实短信，返回 devCode 供前端弹窗显示
       response.devCode = code
       response.testMode = true
       console.log(`[TEST MODE] 验证码: ${code}`)
     }
+
+    await set(`sms:${phone}`, {
+      code,
+      expiresAt: Date.now() + 300000,  // 5 minutes
+      attempts: 0,
+      lastSentAt: Date.now()
+    }, 300)
 
     res.json(response)
 
