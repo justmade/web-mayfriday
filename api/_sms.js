@@ -28,6 +28,7 @@ export async function sendSmsCode(phone) {
     PhoneNumber: phone,
     SignName: process.env.SMS_SIGN_NAME,
     TemplateCode: process.env.SMS_TEMPLATE_CODE,
+    TemplateParam: JSON.stringify({ min: '5' }),
     CodeLength: 6,
     ValidTime: 300,
     Interval: 60,
