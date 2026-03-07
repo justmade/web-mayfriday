@@ -5,6 +5,7 @@
 
 import { get, set, del } from './_redis.js'
 import jwt from 'jsonwebtoken'
+import { verifySmsCode } from './_verify-sms.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -46,41 +47,9 @@ export default async function handler(req, res) {
     }
 
     // 1. 验证短信验证码 / Verify SMS code
-    const smsData = await get(`sms:${phone}`)
-
-    if (!smsData) {
-      return res.status(400).json({
-        success: false,
-        error: '验证码不存在或已过期 / Code not found or expired'
-      })
-    }
-
-    if (smsData.code !== smsCode) {
-      // 增加尝试次数 / Increment attempts
-      smsData.attempts = (smsData.attempts || 0) + 1
-
-      if (smsData.attempts >= 3) {
-        // 锁定5分钟 / Lock for 5 minutes
-        await del(`sms:${phone}`)
-        return res.status(400).json({
-          success: false,
-          error: '验证码错误次数过多，请重新获取 / Too many attempts, please get a new code'
-        })
-      }
-
-      await set(`sms:${phone}`, smsData, 300)
-
-      return res.status(400).json({
-        success: false,
-        error: '验证码错误 / Incorrect verification code'
-      })
-    }
-
-    if (Date.now() > smsData.expiresAt) {
-      return res.status(400).json({
-        success: false,
-        error: '验证码已过期 / Verification code expired'
-      })
+    const verifyResult = await verifySmsCode(phone, smsCode)
+    if (verifyResult !== true) {
+      return res.status(400).json({ success: false, error: verifyResult })
     }
 
     // 2. 验证激活码 / Verify activation code
@@ -169,9 +138,6 @@ export default async function handler(req, res) {
         usedBy: phone,
         usedAt: new Date().toISOString()
       }),
-
-      // Delete SMS code
-      del(`sms:${phone}`)
     ])
 
     // 8. 返回成功响应 / Return success response

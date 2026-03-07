@@ -2,11 +2,12 @@
  * 发送短信验证码 API
  * Send SMS verification code
  *
- * NOTE: This is a MOCK implementation for development.
- * Replace with actual Alibaba Cloud SMS service in production.
+ * 生产模式（SMS_* 环境变量已配置）：调用阿里云号码认证服务（PNVS），验证码由阿里云托管。
+ * 测试模式（未配置）：生成验证码存 Redis，响应中返回 devCode 供前端弹窗显示。
  */
 
 import { get, set } from './_redis.js'
+import { isSmsConfigured, sendSmsCode } from './_sms.js'
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -36,55 +37,25 @@ export default async function handler(req, res) {
       })
     }
 
-    // 3. 生成6位随机验证码 / Generate 6-digit code
-    const code = Math.floor(100000 + Math.random() * 900000).toString()
-
-    // 4. 发送短信（MOCK - 实际生产环境需要替换为真实的阿里云SMS调用）
-    // Send SMS (MOCK - Replace with real Alibaba Cloud SMS in production)
-
-    // TODO: Replace with actual Alibaba Cloud SMS implementation
-    /*
-    const client = new alibabaCloudSMS.default({
-      accessKeyId: process.env.SMS_ACCESS_KEY_ID,
-      accessKeySecret: process.env.SMS_ACCESS_KEY_SECRET,
-      endpoint: 'dysmsapi.aliyuncs.com'
-    })
-
-    await client.sendSms({
-      phoneNumbers: phone,
-      signName: process.env.SMS_SIGN_NAME,
-      templateCode: process.env.SMS_TEMPLATE_CODE,
-      templateParam: JSON.stringify({ code })
-    })
-    */
-
-    // MOCK: Console log for development
-    console.log(`[MOCK SMS] 发送验证码到 ${phone}: ${code}`)
-    console.log(`[MOCK SMS] Verification code sent to ${phone}: ${code}`)
-
-    // 5. 保存验证码到Redis（5分钟过期）/ Save to Redis (5 min expiry)
-    await set(`sms:${phone}`, {
-      code,
-      expiresAt: Date.now() + 300000,  // 5 minutes
-      attempts: 0,
-      lastSentAt: Date.now()
-    }, 300)
-
-    // Return success
     const response = {
       success: true,
       message: '验证码已发送 / Verification code sent'
     }
 
-    // 如果没有配置阿里云短信，返回验证码用于测试
-    // If SMS service not configured, return code for testing
-    const smsConfigured = process.env.SMS_ACCESS_KEY_ID &&
-                          process.env.SMS_ACCESS_KEY_SECRET &&
-                          process.env.SMS_SIGN_NAME &&
-                          process.env.SMS_TEMPLATE_CODE
-
-    if (!smsConfigured) {
-      // 测试模式：直接返回验证码
+    if (isSmsConfigured()) {
+      // 生产模式：阿里云 PNVS 发送并托管验证码，无需本地存储
+      await sendSmsCode(phone)
+      // 仍需记录 lastSentAt 用于防刷限制
+      await set(`sms:${phone}`, { lastSentAt: Date.now() }, 300)
+    } else {
+      // 测试模式：生成验证码存 Redis，返回 devCode
+      const code = Math.floor(100000 + Math.random() * 900000).toString()
+      await set(`sms:${phone}`, {
+        code,
+        expiresAt: Date.now() + 300000,  // 5 minutes
+        attempts: 0,
+        lastSentAt: Date.now()
+      }, 300)
       response.devCode = code
       response.testMode = true
       console.log(`[TEST MODE] 验证码: ${code}`)
