@@ -15,7 +15,7 @@ const resources = {
       },
       home: {
         hero: {
-          title: 'Mayin Friday Handicraft Studio',
+          title: 'MAYIN FRIDAY Handicraft Studio',
           subtitle: '传统编织艺术，现代生活美学',
           cta: '探索更多',
         },
@@ -114,7 +114,7 @@ const resources = {
       },
       home: {
         hero: {
-          title: 'Mayin Friday Handicraft Studio',
+          title: 'MAYIN FRIDAY Handicraft Studio',
           subtitle: 'Traditional Weaving Art, Modern Living Aesthetics',
           cta: 'Explore More',
         },
