@@ -1,5 +1,32 @@
 export const courses = [
   {
+    id: "course2",
+    courseId: "course2",
+    title: "萨米织带零基础课程",
+    titleEn: "Sámi Band Weaving Beginner Course",
+    description: "从排织基础开始，学习萨米织带的历史、工具、图解原理与完整编织流程。",
+    descriptionEn: "Start with plain band weaving and learn Sámi band history, tools, pattern principles, and the complete weaving process.",
+    image: "/images/courses/course2/第1页-1.jpeg",
+    difficulty: "beginner",
+    duration: "自定进度",
+    durationEn: "Self-paced",
+    sessions: "11节课",
+    sessionsEn: "11 lessons",
+    price: 0,
+    highlights: [
+      "萨米织带历史与工具",
+      "取线、穿线与提花原理",
+      "完整编织与收尾流程",
+      "Sami、Inkle、Sigga 图解包",
+    ],
+    highlightsEn: [
+      "Sámi band history and tools",
+      "Warping, threading, and pattern principles",
+      "Complete weaving and finishing workflow",
+      "Sámi, Inkle, and Sigga pattern pack",
+    ],
+  },
+  {
     id: "course1",
     courseId: "course1",
     title: "卡织入门课程",

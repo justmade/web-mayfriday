@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { HiKey, HiTrash, HiRefresh, HiPlus, HiCheckCircle, HiXCircle } from 'react-icons/hi'
 
 /**
@@ -45,7 +45,7 @@ function AdminCodes() {
         setError(data.error)
         setIsAuthenticated(false)
       }
-    } catch (err) {
+    } catch {
       setError('获取失败 / Failed to fetch codes')
       setIsAuthenticated(false)
     } finally {
@@ -83,7 +83,7 @@ function AdminCodes() {
       } else {
         setError(data.error)
       }
-    } catch (err) {
+    } catch {
       setError('创建失败 / Failed to create code')
     } finally {
       setLoading(false)
@@ -120,7 +120,7 @@ function AdminCodes() {
       } else {
         setError(data.error)
       }
-    } catch (err) {
+    } catch {
       setError('删除失败 / Failed to delete code')
     } finally {
       setLoading(false)
@@ -273,6 +273,7 @@ function AdminCodes() {
                   className="w-full border border-gray-300 rounded-lg px-4 py-3"
                 >
                   <option value="course1">course1 - 卡织入门课程</option>
+                  <option value="course2">course2 - 萨米织带零基础课程</option>
                 </select>
               </div>
             </div>

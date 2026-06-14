@@ -1,12 +1,8 @@
 import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { HiCheckCircle, HiChevronRight } from 'react-icons/hi'
-import { course1Data } from '../data/courses/course1'
+import { courseMap } from '../data/courses/index'
 import useProgressStore from '../store/progressStore'
-
-const courseMap = {
-  course1: course1Data,
-}
 
 function CourseOverview() {
   const { courseId } = useParams()
