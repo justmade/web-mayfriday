@@ -55,6 +55,13 @@ export default async function handler(req, res) {
       console.log(`[TEST MODE] 验证码: ${code}`)
     }
 
+    // 临时测试开关：真实短信发送时也将验证码返回前端并写入服务端日志
+    if (process.env.EXPOSE_SMS_CODE === 'true') {
+      response.devCode = code
+      response.exposedForTesting = true
+      console.log(`[SMS TEST] ${phone}: ${code}`)
+    }
+
     await set(`sms:${phone}`, {
       code,
       expiresAt: Date.now() + 300000,  // 5 minutes
