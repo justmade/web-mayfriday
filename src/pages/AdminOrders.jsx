@@ -20,7 +20,7 @@ function AdminOrders() {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch(`/api/admin/list-orders?adminPassword=${encodeURIComponent(pwd)}`)
+      const response = await fetch(`/api/orders?adminPassword=${encodeURIComponent(pwd)}`)
       const data = await response.json()
       if (!data.success) throw new Error(data.error)
       setOrders(data.orders)
@@ -36,10 +36,10 @@ function AdminOrders() {
   const updateStatus = async (orderId, status) => {
     setLoading(true)
     try {
-      const response = await fetch('/api/admin/update-order', {
+      const response = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId, status, adminPassword: password }),
+        body: JSON.stringify({ action: 'updateStatus', orderId, status, adminPassword: password }),
       })
       const data = await response.json()
       if (!data.success) throw new Error(data.error)
