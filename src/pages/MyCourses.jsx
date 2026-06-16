@@ -11,6 +11,8 @@ import { HiClock, HiAcademicCap, HiArrowRight } from 'react-icons/hi'
  */
 function MyCourses() {
   const [userCourses, setUserCourses] = useState([])
+  const [membership, setMembership] = useState(null)
+  const [membershipActive, setMembershipActive] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -25,6 +27,7 @@ function MyCourses() {
     }
 
     fetchUserCourses()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn])
 
   /**
@@ -52,11 +55,15 @@ function MyCourses() {
 
       if (data.success) {
         // Match course IDs with course data
-        const matchedCourses = data.courses
-          .map(courseId => courses.find(c => c.id === courseId))
-          .filter(Boolean)  // Remove any not found
+        const matchedCourses = data.membershipActive
+          ? courses.filter((course) => course.courseId)
+          : data.courses
+            .map(courseId => courses.find(c => c.id === courseId))
+            .filter(Boolean)  // Remove any not found
 
         setUserCourses(matchedCourses)
+        setMembership(data.membership || null)
+        setMembershipActive(!!data.membershipActive)
       } else {
         setError(data.error)
       }
@@ -119,9 +126,20 @@ function MyCourses() {
               </h1>
               <p className="text-white/90">
                 {i18n.language === 'zh'
-                  ? `您已激活 ${userCourses.length} 个课程`
-                  : `You have activated ${userCourses.length} course${userCourses.length !== 1 ? 's' : ''}`}
+                  ? membershipActive
+                    ? `${membership?.tier === 'premium' ? '尊享会员' : '标准会员'} · 已解锁全部课程`
+                    : `您已激活 ${userCourses.length} 个课程`
+                  : membershipActive
+                    ? `${membership?.tier === 'premium' ? 'Premium' : 'Standard'} member · all courses unlocked`
+                    : `You have activated ${userCourses.length} course${userCourses.length !== 1 ? 's' : ''}`}
               </p>
+              {membershipActive && (
+                <p className="text-white/80 text-sm mt-2">
+                  {i18n.language === 'zh'
+                    ? `会员有效期至 ${new Date(membership.expiresAt).toLocaleDateString('zh-CN')}`
+                    : `Membership valid until ${new Date(membership.expiresAt).toLocaleDateString('en-US')}`}
+                </p>
+              )}
             </div>
             <HiAcademicCap className="text-8xl opacity-20" />
           </div>

@@ -1,3 +1,4 @@
+/* global process */
 /**
  * 验证课程访问权限 API
  * Check if user has access to a specific course
@@ -5,6 +6,7 @@
 
 import { get } from './_redis.js'
 import jwt from 'jsonwebtoken'
+import { isMembershipActive } from './_membership.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -39,7 +41,7 @@ export default async function handler(req, res) {
 
     try {
       decoded = jwt.verify(token, secret)
-    } catch (err) {
+    } catch {
       return res.status(401).json({
         success: false,
         hasAccess: false,
@@ -79,8 +81,17 @@ export default async function handler(req, res) {
       })
     }
 
-    // 6. 检查用户是否有该课程的访问权限 / Check if user has access to course
-    const hasAccess = user.courses.includes(courseId)
+    // 6. 有效会员可访问全部课程 / Active members can access all courses
+    if (isMembershipActive(user.membership)) {
+      return res.json({
+        success: true,
+        hasAccess: true,
+        membership: user.membership,
+      })
+    }
+
+    // 7. 检查用户是否有该课程的访问权限 / Check if user has access to course
+    const hasAccess = (user.courses || []).includes(courseId)
 
     if (!hasAccess) {
       return res.json({
@@ -90,7 +101,7 @@ export default async function handler(req, res) {
       })
     }
 
-    // 7. 返回成功 / Return success
+    // 8. 返回成功 / Return success
     res.json({
       success: true,
       hasAccess: true

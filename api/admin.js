@@ -1,6 +1,9 @@
 /* global process */
 import redis, { del, get, set } from './_redis.js'
 import { getProductCatalog, getProductCategories, normalizeProduct, saveProductCatalog } from './_products.js'
+import { getMembershipStatus, membershipTiers, normalizeMembershipInput } from './_membership.js'
+
+const phonePattern = /^1[0-9]{10}$/
 
 function isAdminPassword(value) {
   return value === (process.env.ADMIN_PASSWORD || 'admin123')
@@ -79,6 +82,73 @@ async function deleteProduct(req, res) {
   return res.json({ success: true, productId, products: nextProducts })
 }
 
+function normalizePhone(value) {
+  return String(value || '').replace(/[^\d]/g, '')
+}
+
+function presentMember(user) {
+  return {
+    phone: user.phone,
+    registered: !!user.registered,
+    courses: user.courses || [],
+    membership: user.membership || null,
+    membershipStatus: getMembershipStatus(user.membership),
+    createdAt: user.createdAt,
+    lastLoginAt: user.lastLoginAt,
+  }
+}
+
+async function listMembers(req, res) {
+  const keys = await redis.keys('user:*')
+  if (keys.length === 0) return res.json({ success: true, members: [] })
+
+  const values = await redis.mget(keys)
+  const members = values
+    .map((value) => value ? presentMember(JSON.parse(value)) : null)
+    .filter((member) => member?.membership)
+    .sort((a, b) => new Date(b.membership?.updatedAt || b.membership?.startedAt || 0) - new Date(a.membership?.updatedAt || a.membership?.startedAt || 0))
+
+  return res.json({ success: true, members, tiers: Object.values(membershipTiers) })
+}
+
+async function grantMembership(req, res) {
+  const phone = normalizePhone(req.body.phone)
+  if (!phonePattern.test(phone)) return res.status(400).json({ success: false, error: '手机号格式错误 / Invalid phone number' })
+
+  const membership = normalizeMembershipInput(req.body.membership || {})
+  const existingUser = await get(`user:${phone}`)
+  const user = existingUser || {
+    phone,
+    courses: [],
+    registered: false,
+    createdAt: new Date().toISOString(),
+  }
+
+  user.membership = membership
+  user.updatedAt = new Date().toISOString()
+  await set(`user:${phone}`, user)
+
+  return res.json({ success: true, member: presentMember(user) })
+}
+
+async function cancelMembership(req, res) {
+  const phone = normalizePhone(req.body.phone)
+  if (!phonePattern.test(phone)) return res.status(400).json({ success: false, error: '手机号格式错误 / Invalid phone number' })
+
+  const user = await get(`user:${phone}`)
+  if (!user?.membership) return res.status(404).json({ success: false, error: '会员不存在 / Member not found' })
+
+  user.membership = {
+    ...user.membership,
+    status: 'cancelled',
+    cancelledAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
+  await set(`user:${phone}`, user)
+
+  return res.json({ success: true, member: presentMember(user) })
+}
+
 export default async function handler(req, res) {
   if (!requireAdmin(req, res)) return
 
@@ -87,10 +157,13 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET' && action === 'listCodes') return listCodes(req, res)
     if (req.method === 'GET' && action === 'listProducts') return listProducts(req, res)
+    if (req.method === 'GET' && action === 'listMembers') return listMembers(req, res)
     if (req.method === 'POST' && action === 'createCode') return createCode(req, res)
     if (req.method === 'POST' && action === 'deleteCode') return deleteCode(req, res)
     if (req.method === 'POST' && action === 'upsertProduct') return upsertProduct(req, res)
     if (req.method === 'POST' && action === 'deleteProduct') return deleteProduct(req, res)
+    if (req.method === 'POST' && action === 'grantMembership') return grantMembership(req, res)
+    if (req.method === 'POST' && action === 'cancelMembership') return cancelMembership(req, res)
 
     return res.status(400).json({ success: false, error: '后台操作无效 / Invalid admin action' })
   } catch (error) {

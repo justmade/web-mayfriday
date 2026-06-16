@@ -1,3 +1,4 @@
+/* global process */
 /**
  * 获取用户课程列表 API
  * Get user's activated courses
@@ -5,6 +6,7 @@
 
 import { get } from './_redis.js'
 import jwt from 'jsonwebtoken'
+import { getMembershipStatus, isMembershipActive } from './_membership.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -29,7 +31,7 @@ export default async function handler(req, res) {
 
     try {
       decoded = jwt.verify(token, secret)
-    } catch (err) {
+    } catch {
       return res.status(401).json({
         success: false,
         error: '登录已过期，请重新登录 / Session expired, please login again'
@@ -65,11 +67,16 @@ export default async function handler(req, res) {
       })
     }
 
+    const membershipActive = isMembershipActive(user.membership)
+
     // 6. 返回课程ID列表 / Return course IDs
     // Note: Frontend will match these IDs with course data from courses.js
     res.json({
       success: true,
-      courses: user.courses,
+      courses: user.courses || [],
+      membership: user.membership || null,
+      membershipActive,
+      membershipStatus: getMembershipStatus(user.membership),
       phone: user.phone,
       deviceName: user.deviceName
     })
