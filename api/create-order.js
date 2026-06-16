@@ -1,5 +1,5 @@
 import crypto from 'node:crypto'
-import { getConfiguredPrice, products } from '../src/data/products.js'
+import { getConfiguredPrice, products } from '../shared/products.js'
 import redis, { set } from './_redis.js'
 
 const phonePattern = /^1\d{10}$/

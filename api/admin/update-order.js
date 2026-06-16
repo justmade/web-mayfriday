@@ -1,3 +1,4 @@
+/* global process */
 import { get, set } from '../_redis.js'
 
 const allowedStatuses = new Set(['pending_confirmation', 'contacted', 'paid', 'shipped', 'cancelled'])

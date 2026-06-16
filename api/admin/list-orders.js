@@ -1,3 +1,4 @@
+/* global process */
 import redis, { get } from '../_redis.js'
 
 export default async function handler(req, res) {
