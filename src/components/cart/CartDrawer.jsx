@@ -1,11 +1,13 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HiX } from 'react-icons/hi'
+import { useNavigate } from 'react-router-dom'
 import useCartStore from '../../store/cartStore'
 import CartItem from './CartItem'
 
 function CartDrawer() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { items, isDrawerOpen, getTotalPrice } = useCartStore((state) => ({
     items: state.items,
     isDrawerOpen: state.isDrawerOpen,
@@ -63,7 +65,7 @@ function CartDrawer() {
           ) : (
             <div>
               {items.map((item) => (
-                <CartItem key={item.id} item={item} />
+                <CartItem key={item.cartItemId || item.id} item={item} />
               ))}
             </div>
           )}
@@ -80,7 +82,13 @@ function CartDrawer() {
                 ¥{totalPrice}
               </span>
             </div>
-            <button className="btn-primary w-full">
+            <button
+              onClick={() => {
+                closeDrawer()
+                navigate('/checkout')
+              }}
+              className="btn-primary w-full"
+            >
               {t('tools.checkout')}
             </button>
           </div>

@@ -1,12 +1,14 @@
+/* eslint-disable react/prop-types */
 import { useTranslation } from 'react-i18next'
 import { HiMinus, HiPlus, HiX } from 'react-icons/hi'
 import useCartStore from '../../store/cartStore'
 
 function CartItem({ item }) {
-  const { i18n, t } = useTranslation()
+  const { i18n } = useTranslation()
   const { updateQuantity, removeItem } = useCartStore()
 
   const name = i18n.language === 'zh' ? item.name : item.nameEn
+  const cartItemId = item.cartItemId || String(item.id)
 
   return (
     <div className="flex gap-4 py-4 border-b border-gray-200">
@@ -29,7 +31,7 @@ function CartItem({ item }) {
         <div className="flex justify-between items-start mb-2">
           <h3 className="font-medium text-gray-900">{name}</h3>
           <button
-            onClick={() => removeItem(item.id)}
+            onClick={() => removeItem(cartItemId)}
             className="text-gray-400 hover:text-red-500 transition-colors"
             aria-label="Remove item"
           >
@@ -37,11 +39,19 @@ function CartItem({ item }) {
           </button>
         </div>
 
+        {item.selectedOptions?.length > 0 && (
+          <p className="text-xs text-gray-500 mb-3">
+            {item.selectedOptions.map((option) => (
+              i18n.language === 'zh' ? option.valueName : option.valueNameEn
+            )).join(' · ')}
+          </p>
+        )}
+
         <div className="flex justify-between items-center">
           {/* Quantity controls */}
           <div className="flex items-center space-x-2">
             <button
-              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+              onClick={() => updateQuantity(cartItemId, item.quantity - 1)}
               className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center hover:bg-gray-200 transition-colors"
               aria-label="Decrease quantity"
             >
@@ -51,7 +61,7 @@ function CartItem({ item }) {
               {item.quantity}
             </span>
             <button
-              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+              onClick={() => updateQuantity(cartItemId, item.quantity + 1)}
               className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center hover:bg-gray-200 transition-colors"
               aria-label="Increase quantity"
             >

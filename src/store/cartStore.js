@@ -9,12 +9,13 @@ const useCartStore = create(
 
       addItem: (product) => {
         const items = get().items
-        const existingItem = items.find(item => item.id === product.id)
+        const cartItemId = product.cartItemId || String(product.id)
+        const existingItem = items.find(item => (item.cartItemId || String(item.id)) === cartItemId)
 
         if (existingItem) {
           set({
             items: items.map(item =>
-              item.id === product.id
+              (item.cartItemId || String(item.id)) === cartItemId
                 ? { ...item, quantity: item.quantity + 1 }
                 : item
             ),
@@ -26,21 +27,23 @@ const useCartStore = create(
         }
       },
 
-      removeItem: (id) => {
+      removeItem: (cartItemId) => {
         set({
-          items: get().items.filter(item => item.id !== id),
+          items: get().items.filter(item => (item.cartItemId || String(item.id)) !== cartItemId),
         })
       },
 
-      updateQuantity: (id, quantity) => {
+      updateQuantity: (cartItemId, quantity) => {
         if (quantity <= 0) {
-          get().removeItem(id)
+          get().removeItem(cartItemId)
           return
         }
 
         set({
           items: get().items.map(item =>
-            item.id === id ? { ...item, quantity } : item
+            (item.cartItemId || String(item.id)) === cartItemId
+              ? { ...item, quantity: Math.min(quantity, item.stock || quantity) }
+              : item
           ),
         })
       },
@@ -60,6 +63,10 @@ const useCartStore = create(
     }),
     {
       name: 'cart-storage',
+      version: 2,
+      migrate: (persistedState, version) => version < 2
+        ? { ...persistedState, items: [] }
+        : persistedState,
     }
   )
 )

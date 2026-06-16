@@ -18,6 +18,8 @@ import AdminCodes from './pages/AdminCodes'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import CourseOverview from './pages/CourseOverview'
 import LessonDetail from './pages/LessonDetail'
+import Checkout from './pages/Checkout'
+import AdminOrders from './pages/AdminOrders'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -45,6 +47,7 @@ function App() {
           <Route path="membership" element={<Membership />} />
           <Route path="studio" element={<Studio />} />
           <Route path="gallery" element={<Gallery />} />
+          <Route path="checkout" element={<Checkout />} />
 
           {/* Authentication routes */}
           <Route path="activate" element={<Activate />} />
@@ -81,6 +84,7 @@ function App() {
 
           {/* Admin routes */}
           <Route path="admin/codes" element={<AdminCodes />} />
+          <Route path="admin/orders" element={<AdminOrders />} />
         </Route>
       </Routes>
     </BrowserRouter>
