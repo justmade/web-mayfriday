@@ -34,7 +34,7 @@ function AdminCodes() {
     setError('')
 
     try {
-      const res = await fetch(`/api/admin/list-codes?adminPassword=${encodeURIComponent(pwd)}`)
+      const res = await fetch(`/api/admin?action=listCodes&adminPassword=${encodeURIComponent(pwd)}`)
       const data = await res.json()
 
       if (data.success) {
@@ -63,10 +63,11 @@ function AdminCodes() {
     setSuccess('')
 
     try {
-      const res = await fetch('/api/admin/create-code', {
+      const res = await fetch('/api/admin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          action: 'createCode',
           code: newCode.toUpperCase(),
           courseId: courseId,
           adminPassword: password
@@ -102,10 +103,11 @@ function AdminCodes() {
     setError('')
 
     try {
-      const res = await fetch('/api/admin/delete-code', {
+      const res = await fetch('/api/admin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          action: 'deleteCode',
           code,
           adminPassword: password
         })

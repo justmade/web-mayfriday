@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { BrowserRouter, Routes, Route, useParams, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import MainLayout from './components/layout/MainLayout'
@@ -20,6 +21,7 @@ import CourseOverview from './pages/CourseOverview'
 import LessonDetail from './pages/LessonDetail'
 import Checkout from './pages/Checkout'
 import AdminOrders from './pages/AdminOrders'
+import AdminProducts from './pages/AdminProducts'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -85,6 +87,7 @@ function App() {
           {/* Admin routes */}
           <Route path="admin/codes" element={<AdminCodes />} />
           <Route path="admin/orders" element={<AdminOrders />} />
+          <Route path="admin/products" element={<AdminProducts />} />
         </Route>
       </Routes>
     </BrowserRouter>

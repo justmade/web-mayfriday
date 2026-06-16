@@ -1,7 +1,8 @@
 /* global process */
 import crypto from 'node:crypto'
 import redis, { get, set } from './_redis.js'
-import { getConfiguredPrice, products } from '../shared/products.js'
+import { getProductCatalog } from './_products.js'
+import { getConfiguredPrice } from '../shared/products.js'
 
 const phonePattern = /^1[0-9]{10}$/
 const allowedStatuses = new Set(['pending_confirmation', 'contacted', 'paid', 'shipped', 'cancelled'])
@@ -20,6 +21,7 @@ async function createOrder(req, res) {
     return res.status(400).json({ success: false, error: '购物车为空或商品数量异常 / Invalid cart' })
   }
 
+  const products = await getProductCatalog()
   const normalizedItems = items.map((item) => {
     const product = products.find((candidate) => candidate.id === item.productId)
     const quantity = Number(item.quantity)

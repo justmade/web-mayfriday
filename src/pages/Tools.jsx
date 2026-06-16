@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { products, categories } from '../data/products'
+import { products as fallbackProducts, categories as fallbackCategories } from '../data/products'
 import ProductCard from '../components/common/ProductCard'
 import { HiAdjustments, HiCheckCircle, HiSearch, HiShoppingBag } from 'react-icons/hi'
 
@@ -8,13 +8,34 @@ function Tools() {
   const { t, i18n } = useTranslation()
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [query, setQuery] = useState('')
+  const [products, setProducts] = useState(fallbackProducts)
+  const [categories, setCategories] = useState(fallbackCategories)
   const zh = i18n.language === 'zh'
+
+  useEffect(() => {
+    let active = true
+
+    fetch('/api/products')
+      .then((response) => response.json())
+      .then((data) => {
+        if (!active || !data.success) return
+        setProducts(data.products)
+        setCategories(data.categories)
+      })
+      .catch(() => {
+        if (!active) return
+        setProducts(fallbackProducts)
+        setCategories(fallbackCategories)
+      })
+
+    return () => { active = false }
+  }, [])
 
   const filteredProducts = useMemo(() => products.filter((product) => {
     const categoryMatches = selectedCategory === 'all' || product.category === selectedCategory
     const searchTarget = `${product.name} ${product.nameEn} ${product.description} ${product.descriptionEn}`.toLowerCase()
     return categoryMatches && searchTarget.includes(query.trim().toLowerCase())
-  }), [selectedCategory, query])
+  }), [products, selectedCategory, query])
 
   return (
     <div className="min-h-screen bg-gray-50">
