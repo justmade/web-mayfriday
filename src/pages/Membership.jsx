@@ -1,9 +1,69 @@
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { membershipPlans, memberBenefits } from '../data/membership'
 import { HiCheck, HiSparkles } from 'react-icons/hi'
+import useAuthStore from '../store/authStore'
 
 function Membership() {
   const { i18n } = useTranslation()
+  const { token, isLoggedIn, checkAuth } = useAuthStore()
+  const [membership, setMembership] = useState(null)
+  const [membershipActive, setMembershipActive] = useState(false)
+
+  useEffect(() => {
+    if (!checkAuth() || !token) return
+
+    let active = true
+
+    fetch('/api/get-user-courses', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!active || !data.success) return
+        setMembership(data.membership || null)
+        setMembershipActive(!!data.membershipActive)
+      })
+      .catch(() => {
+        if (!active) return
+        setMembership(null)
+        setMembershipActive(false)
+      })
+
+    return () => { active = false }
+  }, [checkAuth, token])
+
+  const getPlanAction = (plan) => {
+    if (!isLoggedIn || !membershipActive) {
+      return {
+        label: i18n.language === 'zh' ? '咨询开通会员' : 'Contact to activate',
+        href: '/studio',
+        disabled: false,
+      }
+    }
+
+    if (membership?.tier === plan.id) {
+      return {
+        label: i18n.language === 'zh' ? '当前会员' : 'Current plan',
+        href: '/my-courses',
+        disabled: true,
+      }
+    }
+
+    if (membership?.tier === 'standard' && plan.id === 'premium') {
+      return {
+        label: i18n.language === 'zh' ? '咨询升级尊享会员' : 'Contact to upgrade',
+        href: '/studio',
+        disabled: false,
+      }
+    }
+
+    return {
+      label: i18n.language === 'zh' ? '咨询续费 / 调整会员' : 'Contact to renew',
+      href: '/studio',
+      disabled: false,
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -51,6 +111,7 @@ function Membership() {
               const name = i18n.language === 'zh' ? plan.name : plan.nameEn
               const description = i18n.language === 'zh' ? plan.description : plan.descriptionEn
               const features = i18n.language === 'zh' ? plan.features : plan.featuresEn
+              const action = getPlanAction(plan)
 
               return (
                 <div
@@ -85,8 +146,20 @@ function Membership() {
                       </div>
                     </div>
 
-                    <a href="/studio" className="btn-primary w-full mb-6 inline-block text-center">
-                      {i18n.language === 'zh' ? '咨询开通会员' : 'Contact to activate'}
+                    {membershipActive && membership?.tier === plan.id && (
+                      <div className="mb-4 border border-primary bg-soft-pink px-3 py-2 text-sm text-primary">
+                        {i18n.language === 'zh'
+                          ? `当前方案，有效期至 ${new Date(membership.expiresAt).toLocaleDateString('zh-CN')}`
+                          : `Current plan, valid until ${new Date(membership.expiresAt).toLocaleDateString('en-US')}`}
+                      </div>
+                    )}
+
+                    <a
+                      href={action.href}
+                      aria-disabled={action.disabled}
+                      className={`w-full mb-6 inline-block text-center ${action.disabled ? 'btn-outline pointer-events-none opacity-80' : 'btn-primary'}`}
+                    >
+                      {action.label}
                     </a>
 
                     <div className="space-y-3">
