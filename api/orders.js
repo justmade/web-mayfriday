@@ -3,7 +3,7 @@ import crypto from 'node:crypto'
 import redis, { get, set } from './_redis.js'
 import { getConfiguredPrice, products } from '../shared/products.js'
 
-const phonePattern = /^1\d{10}$/
+const phonePattern = /^1[0-9]{10}$/
 const allowedStatuses = new Set(['pending_confirmation', 'contacted', 'paid', 'shipped', 'cancelled'])
 
 function isAdminPassword(value) {
@@ -12,7 +12,8 @@ function isAdminPassword(value) {
 
 async function createOrder(req, res) {
   const { customer, items } = req.body || {}
-  if (!customer?.name || !phonePattern.test(customer?.phone || '') || !customer?.address) {
+  const phone = String(customer?.phone || '').replace(/[^\d]/g, '')
+  if (!customer?.name || !phonePattern.test(phone) || !customer?.address) {
     return res.status(400).json({ success: false, error: '请填写有效的收货信息 / Invalid shipping details' })
   }
   if (!Array.isArray(items) || items.length === 0 || items.length > 30) {
@@ -49,7 +50,7 @@ async function createOrder(req, res) {
     status: 'pending_confirmation',
     customer: {
       name: customer.name.trim().slice(0, 50),
-      phone: customer.phone,
+      phone,
       address: customer.address.trim().slice(0, 300),
       contactMethod: customer.contactMethod === 'wechat' ? 'wechat' : 'phone',
       note: String(customer.note || '').trim().slice(0, 500),

@@ -13,7 +13,10 @@ function Checkout() {
   const [error, setError] = useState('')
   const [order, setOrder] = useState(null)
 
-  const updateField = (field, value) => setForm((current) => ({ ...current, [field]: value }))
+  const updateField = (field, value) => {
+    const nextValue = field === 'phone' ? value.replace(/[^\d]/g, '').slice(0, 11) : value
+    setForm((current) => ({ ...current, [field]: nextValue }))
+  }
 
   const submitOrder = async (event) => {
     event.preventDefault()
@@ -94,7 +97,7 @@ function Checkout() {
               </label>
               <label className="text-sm font-medium text-gray-700">
                 {zh ? '手机号码' : 'Phone'}
-                <input required pattern="1\\d{10}" value={form.phone} onChange={(e) => updateField('phone', e.target.value)} className="mt-2 w-full border border-gray-300 px-3 py-2.5 focus:outline-none focus:border-primary" />
+                <input required type="tel" inputMode="numeric" autoComplete="tel" pattern="1[0-9]{10}" value={form.phone} onChange={(e) => updateField('phone', e.target.value)} className="mt-2 w-full border border-gray-300 px-3 py-2.5 focus:outline-none focus:border-primary" />
               </label>
             </div>
             <label className="block text-sm font-medium text-gray-700 mt-4">
