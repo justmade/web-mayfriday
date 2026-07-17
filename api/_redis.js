@@ -5,8 +5,9 @@
 
 import Redis from 'ioredis'
 
-// 创建 Redis 客户端实例
-const redis = new Redis(process.env.REDIS_URL)
+// 优先使用项目自定义变量；REDIS_URL 保留用于兼容旧部署和本地开发。
+const redisUrl = process.env.mayinfriday_REDIS_URL || process.env.REDIS_URL
+const redis = new Redis(redisUrl)
 
 /**
  * 获取数据（自动 JSON 解析）
