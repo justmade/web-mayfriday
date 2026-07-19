@@ -30,3 +30,20 @@ ossutil
 ossutil_output/
 .env.local
 .env*.local
+
+# Local content and generated media restored from dd0bc42
+/content/courses/
+/content/resources/dogdir/
+/content/resources/mini heddle/
+/temp/hls/
+/temp/new-article.js
+
+# Local documentation and upload helpers restored from dd0bc42
+/ADDING_RESOURCE_IMAGES.md
+/BACKEND_ADMIN_GUIDE.md
+/COURSE_WORKFLOW.md
+/QUICK_FIX_IMAGES.md
+/QUICK_FIX_OSS.md
+/fix-oss-dns.sh
+/upload-mini-heddle-video.sh
+/upload-oss.py
