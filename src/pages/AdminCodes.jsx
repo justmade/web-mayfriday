@@ -276,6 +276,7 @@ function AdminCodes() {
                 >
                   <option value="course1">course1 - 卡织入门课程</option>
                   <option value="course2">course2 - 萨米织带零基础课程</option>
+                  <option value="course3">course3 - 编织手链课程</option>
                 </select>
               </div>
             </div>

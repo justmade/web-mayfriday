@@ -1,5 +1,32 @@
 export const courses = [
   {
+    id: "course3",
+    courseId: "course3",
+    title: "编织手链课程",
+    titleEn: "Woven Bracelet Course",
+    description: "通过完整视频学习材料准备、经线固定、图案编织和收尾方法，完成一条编织手链。",
+    descriptionEn: "Learn material preparation, warp setup, pattern weaving, and finishing in a complete bracelet video tutorial.",
+    image: "/images/courses/course3/cover.jpg",
+    difficulty: "beginner",
+    duration: "47 分钟",
+    durationEn: "47 minutes",
+    sessions: "1节课",
+    sessionsEn: "1 lesson",
+    price: 0,
+    highlights: [
+      "完整视频演示",
+      "材料与工具准备",
+      "图案编织过程",
+      "手链收尾方法",
+    ],
+    highlightsEn: [
+      "Complete video demonstration",
+      "Materials and tool preparation",
+      "Pattern weaving process",
+      "Bracelet finishing method",
+    ],
+  },
+  {
     id: "course2",
     courseId: "course2",
     title: "萨米织带零基础课程",
