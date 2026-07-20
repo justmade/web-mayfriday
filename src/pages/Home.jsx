@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { courses } from '../data/courses'
@@ -5,10 +6,44 @@ import { patterns } from '../data/patterns'
 import { articles } from '../data/resources'
 import { membershipPlans } from '../data/membership'
 import Card from '../components/common/Card'
-import { HiAcademicCap, HiBookOpen, HiUserGroup, HiSparkles } from 'react-icons/hi'
+import {
+  HiAcademicCap,
+  HiBookOpen,
+  HiChevronLeft,
+  HiChevronRight,
+  HiUserGroup,
+  HiSparkles,
+} from 'react-icons/hi'
+
+const bannerSlides = [1, 2, 3, 4, 5].map((number) => ({
+  src: `/images/home/banner/banner-${number}.jpg`,
+  altZh: `MAYIN FRIDAY 品牌介绍 ${number}`,
+  altEn: `MAYIN FRIDAY introduction ${number}`,
+}))
 
 function Home() {
   const { t, i18n } = useTranslation()
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false)
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (isCarouselPaused || prefersReducedMotion) return undefined
+
+    const interval = window.setInterval(() => {
+      setCurrentSlide((current) => (current + 1) % bannerSlides.length)
+    }, 5000)
+
+    return () => window.clearInterval(interval)
+  }, [isCarouselPaused])
+
+  const showPreviousSlide = () => {
+    setCurrentSlide((current) => (current - 1 + bannerSlides.length) % bannerSlides.length)
+  }
+
+  const showNextSlide = () => {
+    setCurrentSlide((current) => (current + 1) % bannerSlides.length)
+  }
 
   const featuredCourses = courses.slice(0, 3)
   const featuredPatterns = patterns.slice(0, 4)
@@ -18,11 +53,11 @@ function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="gradient-bg section-padding">
+      <section className="gradient-bg py-12 px-4 md:py-16 md:px-8 lg:px-16">
         <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
-              <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-4xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
                 {t('home.hero.title')}
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 mb-10 font-light leading-relaxed">
@@ -37,8 +72,72 @@ function Home() {
                 </Link>
               </div>
             </div>
-            <div className="hidden lg:block">
-              <div className="aspect-square bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl"></div>
+            <div
+              className="w-full max-w-[200px] md:max-w-sm lg:max-w-md mx-auto"
+              role="region"
+              aria-roledescription="carousel"
+              aria-label={i18n.language === 'zh' ? '品牌介绍图片' : 'Brand introduction images'}
+              onMouseEnter={() => setIsCarouselPaused(true)}
+              onMouseLeave={() => setIsCarouselPaused(false)}
+              onFocusCapture={() => setIsCarouselPaused(true)}
+              onBlurCapture={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) {
+                  setIsCarouselPaused(false)
+                }
+              }}
+            >
+              <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-white shadow-hover">
+                {bannerSlides.map((slide, index) => (
+                  <img
+                    key={slide.src}
+                    src={slide.src}
+                    alt={i18n.language === 'zh' ? slide.altZh : slide.altEn}
+                    aria-hidden={index !== currentSlide}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 motion-reduce:transition-none ${
+                      index === currentSlide ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  />
+                ))}
+
+                <button
+                  type="button"
+                  onClick={showPreviousSlide}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 text-gray-800 shadow-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-primary"
+                  aria-label={i18n.language === 'zh' ? '上一张' : 'Previous image'}
+                  title={i18n.language === 'zh' ? '上一张' : 'Previous image'}
+                >
+                  <HiChevronLeft className="w-6 h-6" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  onClick={showNextSlide}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 text-gray-800 shadow-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-primary"
+                  aria-label={i18n.language === 'zh' ? '下一张' : 'Next image'}
+                  title={i18n.language === 'zh' ? '下一张' : 'Next image'}
+                >
+                  <HiChevronRight className="w-6 h-6" aria-hidden="true" />
+                </button>
+              </div>
+
+              <div className="flex justify-center gap-2 mt-4">
+                {bannerSlides.map((slide, index) => (
+                  <button
+                    key={slide.src}
+                    type="button"
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                      index === currentSlide ? 'bg-primary' : 'bg-gray-300 hover:bg-gray-400'
+                    }`}
+                    aria-label={
+                      i18n.language === 'zh'
+                        ? `显示第 ${index + 1} 张图片`
+                        : `Show image ${index + 1}`
+                    }
+                    aria-current={index === currentSlide ? 'true' : undefined}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
