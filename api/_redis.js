@@ -1,3 +1,4 @@
+/* global process */
 /**
  * Redis 辅助工具
  * Redis helper utility for ioredis
@@ -5,8 +6,11 @@
 
 import Redis from 'ioredis'
 
-// 优先使用项目自定义变量；REDIS_URL 保留用于兼容旧部署和本地开发。
-const redisUrl = process.env.mayinfriday_REDIS_URL || process.env.REDIS_URL
+// Vercel 在 Redis 集成变量重名后会使用这个带项目后缀的名称。
+// 保留之前使用过的名称和 REDIS_URL，兼容旧部署与本地开发。
+const redisUrl = process.env.REDIS_URL_mayinfriday_REDIS_URL
+  || process.env.mayinfriday_REDIS_URL
+  || process.env.REDIS_URL
 const redis = new Redis(redisUrl)
 
 /**
