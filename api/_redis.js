@@ -6,12 +6,22 @@
 
 import Redis from 'ioredis'
 
-// Vercel 在 Redis 集成变量重名后会使用这个带项目后缀的名称。
-// 保留之前使用过的名称和 REDIS_URL，兼容旧部署与本地开发。
-const redisUrl = process.env.REDIS_URL_mayinfriday_REDIS_URL
-  || process.env.mayinfriday_REDIS_URL
-  || process.env.REDIS_URL
-const redis = new Redis(redisUrl)
+const redisUrl = process.env.REDIS_URL
+
+if (!redisUrl) {
+  throw new Error('REDIS_URL 未配置 / REDIS_URL is not configured')
+}
+
+const redis = new Redis(redisUrl, {
+  lazyConnect: true,
+  maxRetriesPerRequest: 3,
+  retryStrategy: (times) => Math.min(times * 200, 3000),
+})
+
+// 长驻进程必须消费 error 事件，避免 Redis 短暂断线导致 Node 进程退出。
+redis.on('error', (error) => {
+  console.error('[redis]', error.message)
+})
 
 /**
  * 获取数据（自动 JSON 解析）

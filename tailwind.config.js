@@ -13,8 +13,8 @@ export default {
         'soft-pink': 'rgba(204, 0, 123, 0.1)',  // Soft pink background
       },
       fontFamily: {
-        sans: ['Noto Sans SC', 'system-ui', 'sans-serif'],
-        heading: ['Noto Serif SC', 'Georgia', 'serif'],
+        sans: ['PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'system-ui', 'sans-serif'],
+        heading: ['Songti SC', 'STSong', 'Noto Serif SC', 'Georgia', 'serif'],
       },
       boxShadow: {
         'soft': '0 2px 15px rgba(0, 0, 0, 0.08)',

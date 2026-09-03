@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "node --watch server.js",
+    "start": "node server.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -14,6 +16,7 @@
     "@alicloud/pop-core": "^1.8.0",
     "ali-oss": "^6.23.0",
     "dotenv": "^17.3.1",
+    "express": "^4.22.2",
     "hls.js": "^1.6.15",
     "i18next": "^23.7.0",
     "ioredis": "^5.9.3",

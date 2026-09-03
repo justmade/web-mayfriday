@@ -28,8 +28,10 @@ dist-ssr
 .ossutilconfig
 ossutil
 ossutil_output/
-.env.local
-.env*.local
+*.pem
+.env
+.env.*
+!.env.example
 
 # Local content and generated media restored from dd0bc42
 /content/courses/
