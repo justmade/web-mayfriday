@@ -75,6 +75,27 @@ DEPLOY_HOST=8.133.195.118 DEPLOY_KEY_PATH=./sh-mayin.pem ./deploy.sh
 - [x] Certbot 自动续期 timer 已启用,模拟续期成功
 - [x] HTTPS 公网验收通过:首页、`/healthz`、JSON API、SPA fallback 均正常
 - [x] 修复主 JS 包未 gzip 的问题(见下)
+- [x] 代码改动已提交:分支 `migrate/aliyun-deployment`,commit `5743f61`(代码 13 文件)+ `341a5cb`(部署配置与文档 7 文件)
+
+### 服务器健康检查(2026-09-04 实测)
+
+| 项目 | 结果 |
+|---|---|
+| PM2 `web-mayfriday` | `online`,运行 8 小时,**重启 0 次**,内存 100.6 MB |
+| 端口监听 | Nginx `0.0.0.0:80/443`;Node **仅** `127.0.0.1:3000` ✓ |
+| certbot 续期 timer | `enabled` + `active`,每日两次 |
+| `.env` | 权限 `600`;12 项变量全部配齐;`EXPOSE_SMS_CODE` 未开启;`JWT_SECRET` 64 字符 |
+| 短信通道 | `SMS_*` 四项均已配置,不会退回 `_sms.js` 的测试模式 |
+| OSS 签名 | `/api/get-video-url` 返回合法签名 URL,OSS 回 404(凭证有效,仅测试文件不存在) |
+| 资源 | 内存 525/1671 MB,Swap 未使用,磁盘 8.3G/40G(23%) |
+| 日志 | PM2 无错误;Nginx 仅有 reload 通知 |
+
+> **PM2「重启 0 次」是关键指标** —— 印证了 `api/_redis.js` 的 `error` 监听生效。修复前 ioredis 的 error 事件无监听会直接 crash 整个 Node 进程。
+
+**上线后仍待处理的两项(非阻塞)**:
+
+- `ADMIN_PASSWORD` 仅 8 字符,且经 URL query 传递、`/admin/*` 前端路由无守卫、接口无限流。建议加长到 20+ 字符,并按阶段二第 3 项把它移到请求头。
+- `/api/get-video-url` 无鉴权已现场复现:未携带任何 token 即可为**任意 OSS 路径**换取 24 小时签名 URL。详见阶段二第 2 项。
 
 ### 上线后修复:主 JS 包未被 gzip 压缩
 
