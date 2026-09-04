@@ -53,14 +53,18 @@ ssh "${ssh_args[@]}" "$remote" \
 
 npm run build
 
-rsync -avz --delete --exclude='.DS_Store' \
+# --chmod=D755,F644 强制统一权限。rsync -a 默认保留源文件权限,若本地某个
+# 素材是 600(从别处拷贝、下载或截图时很容易出现),同步后 Nginx 会读不到
+# 而返回 403 —— 页面上表现为图片裂开,但服务本身完全正常,很难联想到权限。
+# 2026-09-04 曾因此导致 course2 全部 14 张图和 course1 讲义 PDF 无法显示。
+rsync -avz --delete --exclude='.DS_Store' --chmod=D755,F644 \
   -e "$ssh_transport" dist/ "$remote:$DEPLOY_PATH/dist/"
 
-rsync -avz --delete --exclude='.DS_Store' \
+rsync -avz --delete --exclude='.DS_Store' --chmod=D755,F644 \
   -e "$ssh_transport" api/ "$remote:$DEPLOY_PATH/app/api/"
-rsync -avz --delete --exclude='.DS_Store' \
+rsync -avz --delete --exclude='.DS_Store' --chmod=D755,F644 \
   -e "$ssh_transport" shared/ "$remote:$DEPLOY_PATH/app/shared/"
-rsync -avz \
+rsync -avz --chmod=D755,F644 \
   -e "$ssh_transport" \
   server.js package.json package-lock.json ecosystem.config.cjs \
   "$remote:$DEPLOY_PATH/app/"
