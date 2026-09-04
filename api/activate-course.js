@@ -1,158 +1,123 @@
 /**
  * 激活课程 API
- * Activate course with activation code and SMS verification
+ * Authenticated users can activate a course without another SMS challenge.
  */
 
-import { get, set, del } from './_redis.js'
-import jwt from 'jsonwebtoken'
-import { verifySmsCode } from './_verify-sms.js'
+import redis from './_redis.js'
+import { authenticate } from './_auth.js'
+
+export const activateCourseScript = `
+local codeJson = redis.call('GET', KEYS[1])
+if not codeJson then
+  return cjson.encode({ ok = false, reason = 'NOT_FOUND' })
+end
+
+local code = cjson.decode(codeJson)
+if code.used then
+  return cjson.encode({ ok = false, reason = 'USED', usedBy = code.usedBy })
+end
+
+if code.expiresAt and code.expiresAt ~= cjson.null and code.expiresAt < ARGV[2] then
+  return cjson.encode({ ok = false, reason = 'EXPIRED' })
+end
+
+local userJson = redis.call('GET', KEYS[2])
+if not userJson then
+  return cjson.encode({ ok = false, reason = 'USER_NOT_FOUND' })
+end
+
+local user = cjson.decode(userJson)
+if type(user.courses) ~= 'table' then
+  user.courses = {}
+end
+
+local hasCourse = false
+for _, courseId in ipairs(user.courses) do
+  if courseId == code.courseId then
+    hasCourse = true
+    break
+  end
+end
+if not hasCourse then
+  table.insert(user.courses, code.courseId)
+end
+
+code.used = true
+code.usedBy = ARGV[1]
+code.usedAt = ARGV[2]
+user.updatedAt = ARGV[2]
+
+redis.call('SET', KEYS[1], cjson.encode(code))
+redis.call('SET', KEYS[2], cjson.encode(user))
+
+return cjson.encode({ ok = true, courseId = code.courseId })
+`
+
+function activationError(result) {
+  if (result.reason === 'NOT_FOUND') {
+    return '激活码不存在 / Activation code not found'
+  }
+  if (result.reason === 'USED') {
+    return `激活码已被使用 / Activation code already used${result.usedBy ? ` by ${result.usedBy}` : ''}`
+  }
+  if (result.reason === 'EXPIRED') {
+    return '激活码已过期 / Activation code expired'
+  }
+  if (result.reason === 'USER_NOT_FOUND') {
+    return '用户不存在 / User not found'
+  }
+  return '激活失败，请重试 / Activation failed, please try again'
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { activationCode, phone, smsCode, deviceId, deviceName } = req.body
-
-  // Validate required fields
-  if (!activationCode || !phone || !smsCode || !deviceId || !deviceName) {
-    return res.status(400).json({
-      success: false,
-      error: '缺少必填字段 / Missing required fields'
-    })
-  }
-
   try {
-    // 0. 如果用户已登录，验证手机号一致性 / If user is logged in, verify phone number matches
-    const authHeader = req.headers.authorization
-    if (authHeader) {
-      try {
-        const token = authHeader.replace('Bearer ', '')
-        const secret = process.env.JWT_SECRET || 'development-secret-key-change-in-production'
-        const decoded = jwt.verify(token, secret)
-
-        // 验证提交的手机号与登录账号的手机号一致
-        // Verify submitted phone matches logged-in account phone
-        if (decoded.phone !== phone) {
-          return res.status(400).json({
-            success: false,
-            error: '请使用当前登录账号的手机号激活课程 / Please use current account phone number to activate'
-          })
-        }
-      } catch (err) {
-        // Token 无效或过期，忽略（允许继续激活）
-        // Invalid or expired token, ignore (allow activation to proceed)
-        console.log('Token verification failed in activate-course:', err.message)
-      }
-    }
-
-    // 1. 验证短信验证码 / Verify SMS code
-    const verifyResult = await verifySmsCode(phone, smsCode)
-    if (verifyResult !== true) {
-      return res.status(400).json({ success: false, error: verifyResult })
-    }
-
-    // 2. 验证激活码 / Verify activation code
-    const codeData = await get(`code:${activationCode}`)
-
-    if (!codeData) {
-      return res.status(400).json({
+    const auth = await authenticate(req)
+    if (!auth.ok) {
+      return res.status(auth.status).json({
         success: false,
-        error: '激活码不存在 / Activation code not found'
+        error: auth.error,
+        ...(auth.kicked ? { kicked: true } : {}),
       })
     }
 
-    if (codeData.used) {
+    const activationCode = String(req.body?.activationCode || '').trim().toUpperCase()
+    if (!activationCode) {
       return res.status(400).json({
         success: false,
-        error: `激活码已被使用 / Activation code already used${codeData.usedBy ? ` by ${codeData.usedBy}` : ''}`
+        error: '缺少激活码 / Missing activation code',
       })
     }
 
-    if (codeData.expiresAt && Date.now() > new Date(codeData.expiresAt).getTime()) {
-      return res.status(400).json({
-        success: false,
-        error: '激活码已过期 / Activation code expired'
-      })
-    }
-
-    // 3. 获取或创建用户 / Get or create user
-    let user = await get(`user:${phone}`)
-
-    if (!user) {
-      // 新用户（通过激活码直接创建）
-      // New user (created via activation)
-      user = {
-        phone,
-        courses: [],
-        createdAt: new Date().toISOString()
-      }
-    }
-    // 如果用户已存在（可能是注册用户），保留原有属性
-    // If user exists (may be registered user), preserve existing properties
-
-    // 4. 添加课程到用户账户 / Add course to user account
-    if (!user.courses.includes(codeData.courseId)) {
-      user.courses.push(codeData.courseId)
-    }
-
-    // 5. 生成JWT令牌（30天有效）/ Generate JWT token (30 days)
-    const secret = process.env.JWT_SECRET || 'development-secret-key-change-in-production'
-    const token = jwt.sign(
-      {
-        phone,
-        deviceId
-      },
-      secret,
-      { expiresIn: '30d' }
+    const now = new Date().toISOString()
+    const rawResult = await redis.eval(
+      activateCourseScript,
+      2,
+      `code:${activationCode}`,
+      `user:${auth.phone}`,
+      auth.phone,
+      now,
     )
+    const result = JSON.parse(rawResult)
 
-    // 6. 更新用户数据（单设备限制）/ Update user (single device restriction)
-    if (user.currentToken) {
-      // 删除旧设备的令牌 / Delete old device token
-      await del(`token:${user.currentToken}`)
+    if (!result.ok) {
+      const status = result.reason === 'USER_NOT_FOUND' ? 404 : 400
+      return res.status(status).json({ success: false, error: activationError(result) })
     }
 
-    user.currentDevice = deviceId
-    user.deviceName = deviceName
-    user.currentToken = token
-    user.lastLoginAt = new Date().toISOString()
-
-    // 7. 保存所有数据 / Save all data
-    await Promise.all([
-      // Save user data
-      set(`user:${phone}`, user),
-
-      // Save token info (30 days TTL)
-      set(`token:${token}`, {
-        phone,
-        deviceId,
-        issuedAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + 30*24*60*60*1000).toISOString()
-      }, 30*24*60*60),
-
-      // Mark activation code as used
-      set(`code:${activationCode}`, {
-        ...codeData,
-        used: true,
-        usedBy: phone,
-        usedAt: new Date().toISOString()
-      }),
-    ])
-
-    // 8. 返回成功响应 / Return success response
-    res.json({
+    return res.json({
       success: true,
-      token,
-      courseId: codeData.courseId,
-      message: '课程激活成功 / Course activated successfully'
+      courseId: result.courseId,
+      message: '课程激活成功 / Course activated successfully',
     })
-
   } catch (error) {
     console.error('Activate course error:', error)
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      error: '激活失败，请重试 / Activation failed, please try again'
+      error: '激活失败，请重试 / Activation failed, please try again',
     })
   }
 }

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import { generateDeviceId, getDeviceName } from '../utils/deviceFingerprint'
 import { HiCheckCircle, HiXCircle } from 'react-icons/hi'
+import { safeRedirect } from '../utils/safeRedirect'
 
 /**
  * 注册页面
@@ -18,15 +19,19 @@ function Register() {
   const [success, setSuccess] = useState(false)
 
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { login, isLoggedIn } = useAuthStore()
   const { i18n } = useTranslation()
+  const redirectTo = safeRedirect(searchParams.get('redirect'))
+  const redirectQuery = `?redirect=${encodeURIComponent(redirectTo)}`
+  const isActivationFlow = redirectTo === '/activate'
 
   // Redirect if already logged in
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/my-courses')
+      navigate(redirectTo, { replace: true })
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn, navigate, redirectTo])
 
   // Countdown timer for SMS button
   useEffect(() => {
@@ -81,7 +86,7 @@ function Register() {
       } else {
         setError(data.error)
       }
-    } catch (err) {
+    } catch {
       setError(i18n.language === 'zh' ? '发送失败，请重试' : 'Failed to send, please try again')
     }
   }
@@ -119,12 +124,12 @@ function Register() {
 
         // Redirect to my courses after 1 second
         setTimeout(() => {
-          navigate('/my-courses')
+          navigate(redirectTo, { replace: true })
         }, 1000)
       } else {
         setError(data.error)
       }
-    } catch (err) {
+    } catch {
       setError(i18n.language === 'zh' ? '注册失败，请重试' : 'Registration failed, please try again')
     } finally {
       setLoading(false)
@@ -143,8 +148,8 @@ function Register() {
             </h2>
             <p className="text-gray-600">
               {i18n.language === 'zh'
-                ? '使用手机号和验证码注册'
-                : 'Register with phone number and verification code'}
+                ? isActivationFlow ? '注册并登录后即可激活课程' : '使用手机号和验证码注册'
+                : isActivationFlow ? 'Register and log in to activate your course' : 'Register with phone number and verification code'}
             </p>
           </div>
 
@@ -240,17 +245,8 @@ function Register() {
           <div className="mt-6 text-center text-sm text-gray-600">
             {i18n.language === 'zh' ? '已有账号？' : 'Already have an account?'}
             {' '}
-            <Link to="/login" className="text-primary hover:text-secondary font-medium">
+            <Link to={`/login${redirectQuery}`} className="text-primary hover:text-secondary font-medium">
               {i18n.language === 'zh' ? '去登录' : 'Login'}
-            </Link>
-          </div>
-
-          {/* Activate Link */}
-          <div className="mt-3 text-center text-sm text-gray-600">
-            {i18n.language === 'zh' ? '有激活码？' : 'Have activation code?'}
-            {' '}
-            <Link to="/activate" className="text-primary hover:text-secondary font-medium">
-              {i18n.language === 'zh' ? '直接激活' : 'Activate Course'}
             </Link>
           </div>
         </div>

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import { generateDeviceId, getDeviceName } from '../utils/deviceFingerprint'
 import { HiCheckCircle, HiXCircle } from 'react-icons/hi'
+import { safeRedirect } from '../utils/safeRedirect'
 
 /**
  * 登录页面
@@ -18,15 +19,19 @@ function Login() {
   const [success, setSuccess] = useState(false)
 
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { login, isLoggedIn } = useAuthStore()
   const { i18n } = useTranslation()
+  const redirectTo = safeRedirect(searchParams.get('redirect'))
+  const redirectQuery = `?redirect=${encodeURIComponent(redirectTo)}`
+  const isActivationFlow = redirectTo === '/activate'
 
   // Redirect if already logged in
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/my-courses')
+      navigate(redirectTo, { replace: true })
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn, navigate, redirectTo])
 
   // Countdown timer for SMS button
   useEffect(() => {
@@ -84,7 +89,7 @@ function Login() {
       } else {
         setError(data.error)
       }
-    } catch (err) {
+    } catch {
       setError(i18n.language === 'zh' ? '发送失败，请重试' : 'Failed to send, please try again')
     }
   }
@@ -122,12 +127,12 @@ function Login() {
 
         // Redirect to my courses after 1 second
         setTimeout(() => {
-          navigate('/my-courses')
+          navigate(redirectTo, { replace: true })
         }, 1000)
       } else {
         setError(data.error)
       }
-    } catch (err) {
+    } catch {
       setError(i18n.language === 'zh' ? '登录失败，请重试' : 'Login failed, please try again')
     } finally {
       setLoading(false)
@@ -146,8 +151,8 @@ function Login() {
             </h2>
             <p className="text-gray-600">
               {i18n.language === 'zh'
-                ? '使用手机号和验证码登录'
-                : 'Login with phone number and verification code'}
+                ? isActivationFlow ? '登录后即可激活课程' : '使用手机号和验证码登录'
+                : isActivationFlow ? 'Log in to activate your course' : 'Login with phone number and verification code'}
             </p>
           </div>
 
@@ -243,8 +248,8 @@ function Login() {
           <div className="mt-6 text-center text-sm text-gray-600">
             {i18n.language === 'zh' ? '还没有账号？' : 'No account yet?'}
             {' '}
-            <Link to="/activate" className="text-primary hover:text-secondary font-medium">
-              {i18n.language === 'zh' ? '去激活课程' : 'Activate Course'}
+            <Link to={`/register${redirectQuery}`} className="text-primary hover:text-secondary font-medium">
+              {i18n.language === 'zh' ? '去注册' : 'Register'}
             </Link>
           </div>
         </div>
