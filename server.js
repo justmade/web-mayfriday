@@ -9,12 +9,14 @@ import admin from './api/admin.js'
 import checkCourseAccess from './api/check-course-access.js'
 import getUserCourses from './api/get-user-courses.js'
 import getVideoUrl from './api/get-video-url.js'
+import hlsPlaylist from './api/hls-playlist.js'
 import login from './api/login.js'
 import logout from './api/logout.js'
 import orders from './api/orders.js'
 import products from './api/products.js'
 import register from './api/register.js'
 import sendSmsCode from './api/send-sms-code.js'
+import videoToken from './api/video-token.js'
 
 const app = express()
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
@@ -45,6 +47,8 @@ app.all('/api/activate-course', wrap(activateCourse))
 app.all('/api/check-course-access', wrap(checkCourseAccess))
 app.all('/api/get-user-courses', wrap(getUserCourses))
 app.all('/api/get-video-url', wrap(getVideoUrl))
+app.all('/api/video-token', wrap(videoToken))
+app.all('/api/hls-playlist', wrap(hlsPlaylist))
 app.all('/api/products', wrap(products))
 app.all('/api/orders', wrap(orders))
 app.all('/api/admin', wrap(admin))

@@ -3,7 +3,9 @@
  * 生成阿里云OSS私有视频的临时签名URL
  */
 
-import OSS from 'ali-oss'
+import { authenticate } from './_auth.js'
+import { getOssClient } from './_oss.js'
+import { courseIdForObject, normalizeObjectPath, userCanAccessCourse } from './_video-access.js'
 
 export default async function handler(req, res) {
   // 只允许GET请求
@@ -12,42 +14,32 @@ export default async function handler(req, res) {
   }
 
   // 获取视频路径参数
-  const { path } = req.query
-
-  if (!path) {
-    return res.status(400).json({ error: 'Missing video path parameter' })
-  }
-
-  // 验证环境变量
-  if (!process.env.OSS_ACCESS_KEY_ID || !process.env.OSS_ACCESS_KEY_SECRET) {
-    return res.status(500).json({ error: 'OSS credentials not configured' })
+  const objectPath = normalizeObjectPath(req.query?.path)
+  const courseId = courseIdForObject(objectPath)
+  if (!objectPath || !courseId) {
+    return res.status(400).json({ error: 'Invalid video path parameter' })
   }
 
   try {
-    // 创建OSS客户端
-    const client = new OSS({
-      accessKeyId: process.env.OSS_ACCESS_KEY_ID,
-      accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
-      bucket: process.env.OSS_BUCKET || 'web-mayfriday-videos',
-      region: process.env.OSS_REGION || 'oss-cn-beijing',
-      secure: true  // 强制使用 HTTPS
-    })
+    const auth = await authenticate(req)
+    if (!auth.ok) {
+      return res.status(auth.status).json({ error: auth.error, ...(auth.kicked ? { kicked: true } : {}) })
+    }
+    if (!userCanAccessCourse(auth.user, courseId)) {
+      return res.status(403).json({ error: '您还没有购买此课程 / You have not purchased this course' })
+    }
 
-    // 生成24小时有效的签名URL
-    const signedUrl = client.signatureUrl(path, {
-      expires: 86400 // 24小时 = 86400秒
-    })
+    const signedUrl = getOssClient().signatureUrl(objectPath, { expires: 14400 })
 
     // 返回签名URL
     return res.status(200).json({
       url: signedUrl,
-      expiresIn: 86400
+      expiresIn: 14400
     })
   } catch (error) {
     console.error('OSS签名URL生成失败:', error)
     return res.status(500).json({
-      error: 'Failed to generate signed URL',
-      message: error.message
+      error: 'Failed to generate signed URL'
     })
   }
 }

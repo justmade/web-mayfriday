@@ -39,6 +39,8 @@ describe('Aliyun Express entrypoint', () => {
       '/api/check-course-access',
       '/api/get-user-courses',
       '/api/get-video-url',
+      '/api/video-token',
+      '/api/hls-playlist',
       '/api/products',
       '/api/orders',
       '/api/admin',

@@ -1,11 +1,14 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import Hls from 'hls.js'
+import useAuthStore from '../../store/authStore'
 
 function VideoPlayer({ video }) {
   const { i18n } = useTranslation()
+  const token = useAuthStore((state) => state.token)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [videoUrl, setVideoUrl] = useState(video.src)
+  const [videoUrl, setVideoUrl] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const videoRef = useRef(null)
@@ -13,6 +16,9 @@ function VideoPlayer({ video }) {
   const title = video.title && (i18n.language === 'zh' ? video.title : (video.titleEn || video.title))
 
   useEffect(() => {
+    const controller = new AbortController()
+    let active = true
+
     // 检查是否是 HLS 视频（.m3u8）
     const isHLS = video.src && video.src.includes('.m3u8')
 
@@ -22,25 +28,81 @@ function VideoPlayer({ video }) {
       video.platform === 'oss'
     )
 
-    if (isHLS) {
-      // HLS 文件已设为公共读取，直接使用
-      setVideoUrl(video.src)
-    } else if (isOSSUrl) {
-      // 普通 MP4 仍需要签名URL
-      fetchSignedUrl(video.src)
-    } else {
-      // 直接使用原URL（YouTube, Bilibili等）
-      setVideoUrl(video.src)
+    async function loadVideoUrl() {
+      setVideoUrl(null)
+      setError(null)
+
+      if (!isOSSUrl) {
+        setVideoUrl(video.src)
+        return
+      }
+
+      let objectPath
+      try {
+        objectPath = new URL(video.src).pathname.replace(/^\//, '')
+      } catch {
+        setError(i18n.language === 'zh' ? '视频地址无效' : 'Invalid video URL')
+        return
+      }
+
+      // Public resource tutorials remain directly readable from OSS.
+      if (isHLS && objectPath.startsWith('resources/')) {
+        setVideoUrl(video.src)
+        return
+      }
+
+      setIsLoading(true)
+      try {
+        let response
+        if (isHLS) {
+          response = await fetch('/api/video-token', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token || ''}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ path: objectPath }),
+            signal: controller.signal,
+          })
+        } else {
+          response = await fetch(`/api/get-video-url?path=${encodeURIComponent(objectPath)}`, {
+            headers: { 'Authorization': `Bearer ${token || ''}` },
+            signal: controller.signal,
+          })
+        }
+
+        const data = await response.json()
+        if (!response.ok) {
+          throw new Error(data.error || (i18n.language === 'zh' ? '没有视频访问权限' : 'Video access denied'))
+        }
+
+        if (active) {
+          setVideoUrl(isHLS
+            ? `/api/hls-playlist?path=${encodeURIComponent(objectPath)}&t=${encodeURIComponent(data.token)}`
+            : data.url)
+        }
+      } catch (err) {
+        if (err.name !== 'AbortError' && active) {
+          console.error('获取受保护视频失败:', err)
+          setError(err.message)
+        }
+      } finally {
+        if (active) setIsLoading(false)
+      }
     }
+
+    loadVideoUrl()
 
     // 清理函数
     return () => {
+      active = false
+      controller.abort()
       if (hlsRef.current) {
         hlsRef.current.destroy()
         hlsRef.current = null
       }
     }
-  }, [video.src])
+  }, [i18n.language, token, video.platform, video.src])
 
   // 当 videoUrl 更新后，初始化播放器
   useEffect(() => {
@@ -50,12 +112,7 @@ function VideoPlayer({ video }) {
 
     if (isHLS && Hls.isSupported()) {
       // 使用 HLS.js 播放 HLS 视频
-      const hls = new Hls({
-        xhrSetup: function (xhr, url) {
-          // HLS 片段也需要签名，这里添加 crossOrigin
-          xhr.withCredentials = false
-        }
-      })
+      const hls = new Hls()
 
       hls.loadSource(videoUrl)
       hls.attachMedia(videoRef.current)
@@ -78,34 +135,6 @@ function VideoPlayer({ video }) {
     }
     // 普通 MP4 通过 src 属性自动加载
   }, [videoUrl])
-
-  const fetchSignedUrl = async (ossUrl) => {
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      // 提取OSS路径（去除域名部分）
-      const urlObj = new URL(ossUrl)
-      const path = urlObj.pathname.substring(1) // 去掉开头的 /
-
-      // 调用API获取签名URL
-      const response = await fetch(`/api/get-video-url?path=${encodeURIComponent(path)}`)
-
-      if (!response.ok) {
-        throw new Error('Failed to get signed URL')
-      }
-
-      const data = await response.json()
-      setVideoUrl(data.url)
-    } catch (err) {
-      console.error('获取视频签名URL失败:', err)
-      setError(err.message)
-      // 失败时回退到原始URL
-      setVideoUrl(video.src)
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   return (
     <div className="my-8">
@@ -136,7 +165,7 @@ function VideoPlayer({ video }) {
           // 使用原生 video 标签（支持 HLS 和普通 MP4）
           <video
             ref={videoRef}
-            src={videoUrl.includes('.m3u8') ? undefined : videoUrl}
+            src={video.src.includes('.m3u8') ? undefined : videoUrl}
             controls
             crossOrigin="anonymous"
             playsInline
