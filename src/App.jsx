@@ -1,14 +1,12 @@
 /* eslint-disable react/prop-types */
-import { BrowserRouter, Routes, Route, useParams, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import MainLayout from './components/layout/MainLayout'
 import Home from './pages/Home'
 import Courses from './pages/Courses'
-import Patterns from './pages/Patterns'
 import Tools from './pages/Tools'
 import Resources from './pages/Resources'
 import ResourceDetail from './pages/ResourceDetail'
-import Membership from './pages/Membership'
 import Studio from './pages/Studio'
 import Gallery from './pages/Gallery'
 import Activate from './pages/Activate'
@@ -43,11 +41,11 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="courses" element={<Courses />} />
-          <Route path="patterns" element={<Patterns />} />
+          <Route path="patterns" element={<Navigate to="/" replace />} />
           <Route path="tools" element={<Tools />} />
           <Route path="resources" element={<Resources />} />
           <Route path="resources/:slug" element={<ResourceDetail />} />
-          <Route path="membership" element={<Membership />} />
+          <Route path="membership" element={<Navigate to="/" replace />} />
           <Route path="studio" element={<Studio />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="checkout" element={<Checkout />} />

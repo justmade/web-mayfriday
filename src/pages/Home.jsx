@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { courses } from '../data/courses'
-import { patterns } from '../data/patterns'
 import { articles } from '../data/resources'
-import { membershipPlans } from '../data/membership'
 import Card from '../components/common/Card'
 import {
   HiAcademicCap,
@@ -46,9 +44,7 @@ function Home() {
   }
 
   const featuredCourses = courses.slice(0, 3)
-  const featuredPatterns = patterns.slice(0, 4)
   const latestArticles = articles.slice(0, 3)
-  const popularPlan = membershipPlans.find(plan => plan.popular)
 
   return (
     <div>
@@ -66,9 +62,6 @@ function Home() {
               <div className="flex flex-wrap gap-4">
                 <Link to="/courses" className="btn-primary text-lg">
                   {i18n.language === 'zh' ? '浏览课程' : 'Browse Courses'}
-                </Link>
-                <Link to="/membership" className="btn-outline text-lg">
-                  {i18n.language === 'zh' ? '成为会员' : 'Join Membership'}
                 </Link>
               </div>
             </div>
@@ -167,7 +160,7 @@ function Home() {
                 {i18n.language === 'zh' ? '丰富资源' : 'Rich Resources'}
               </h3>
               <p className="text-gray-600">
-                {i18n.language === 'zh' ? '文章、教程、图案库' : 'Articles, tutorials, patterns'}
+                {i18n.language === 'zh' ? '文章、教程、素材' : 'Articles, tutorials, resources'}
               </p>
             </div>
 
@@ -257,91 +250,6 @@ function Home() {
           <div className="text-center">
             <Link to="/courses" className="btn-secondary">
               {t('home.featured.viewAll')}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Membership CTA */}
-      {popularPlan && (
-        <section className="section-padding bg-gradient-to-r from-primary to-secondary text-white">
-          <div className="container-custom">
-            <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                {i18n.language === 'zh' ? '加入会员，解锁全部内容' : 'Join Membership, Unlock All Content'}
-              </h2>
-              <p className="text-xl mb-8 opacity-90">
-                {i18n.language === 'zh'
-                  ? '访问所有课程、图案和独家资源，享受会员专属折扣'
-                  : 'Access all courses, patterns and exclusive resources with member discounts'}
-              </p>
-              <div className="flex flex-wrap justify-center gap-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold">100+</div>
-                  <div className="opacity-90">{i18n.language === 'zh' ? '课程' : 'Courses'}</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold">50+</div>
-                  <div className="opacity-90">{i18n.language === 'zh' ? '图案' : 'Patterns'}</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold">20%</div>
-                  <div className="opacity-90">{i18n.language === 'zh' ? '会员折扣' : 'Discount'}</div>
-                </div>
-              </div>
-              <Link
-                to="/membership"
-                className="inline-block px-12 py-4 bg-white text-primary rounded-full font-bold text-lg hover:shadow-2xl transition-all"
-              >
-                {i18n.language === 'zh' ? '查看会员计划' : 'View Plans'}
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Featured Patterns */}
-      <section className="section-padding bg-white">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {i18n.language === 'zh' ? '热门图案' : 'Popular Patterns'}
-            </h2>
-            <p className="text-xl text-gray-600">
-              {i18n.language === 'zh' ? '下载即用的专业编织图案' : 'Professional patterns ready to download'}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-            {featuredPatterns.map((pattern) => {
-              const name = i18n.language === 'zh' ? pattern.name : pattern.nameEn
-
-              return (
-                <Card key={pattern.id}>
-                  <div className="aspect-[3/4] bg-gray-200 overflow-hidden">
-                    {pattern.image && (
-                      <img
-                        src={pattern.image}
-                        alt={name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.style.display = 'none'
-                        }}
-                      />
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-gray-900 mb-2 line-clamp-1">{name}</h3>
-                    <div className="text-primary font-bold">¥{pattern.price}</div>
-                  </div>
-                </Card>
-              )
-            })}
-          </div>
-
-          <div className="text-center">
-            <Link to="/patterns" className="btn-secondary">
-              {i18n.language === 'zh' ? '浏览所有图案' : 'Browse All Patterns'}
             </Link>
           </div>
         </div>
