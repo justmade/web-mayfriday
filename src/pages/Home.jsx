@@ -10,7 +10,7 @@ import {
   HiChevronLeft,
   HiChevronRight,
   HiUserGroup,
-  HiSparkles,
+  HiShoppingBag,
 } from 'react-icons/hi'
 
 const bannerSlides = [1, 2, 3, 4, 5].map((number) => ({
@@ -148,7 +148,7 @@ function Home() {
                 {i18n.language === 'zh' ? '专业课程' : 'Professional Courses'}
               </h3>
               <p className="text-gray-600">
-                {i18n.language === 'zh' ? '100+ 系统化编织课程' : '100+ systematic courses'}
+                {i18n.language === 'zh' ? '系统化编织教学' : 'Systematic weaving lessons'}
               </p>
             </div>
 
@@ -178,13 +178,13 @@ function Home() {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-cream rounded-full flex items-center justify-center mx-auto mb-4">
-                <HiSparkles className="text-gold" size={32} />
+                <HiShoppingBag className="text-gold" size={32} />
               </div>
               <h3 className="font-bold text-xl mb-2">
-                {i18n.language === 'zh' ? '会员福利' : 'Member Benefits'}
+                {i18n.language === 'zh' ? '精选工具' : 'Curated Tools'}
               </h3>
               <p className="text-gray-600">
-                {i18n.language === 'zh' ? '专属折扣与特权' : 'Exclusive discounts & perks'}
+                {i18n.language === 'zh' ? '编织板、梭子、工具包' : 'Heddles, shuttles, starter kits'}
               </p>
             </div>
           </div>
