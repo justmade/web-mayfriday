@@ -62,7 +62,9 @@ function AdminProducts() {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch(`/api/admin?action=listProducts&adminPassword=${encodeURIComponent(pwd)}`)
+      const response = await fetch('/api/admin?action=listProducts', {
+        headers: { 'x-admin-password': pwd },
+      })
       const data = await response.json()
       if (!data.success) throw new Error(data.error)
       setProducts(data.products)
@@ -104,8 +106,11 @@ function AdminProducts() {
       const product = formToProduct(form)
       const response = await fetch('/api/admin', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'upsertProduct', adminPassword: password, product }),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
+        body: JSON.stringify({ action: 'upsertProduct', product }),
       })
       const data = await response.json()
       if (!data.success) throw new Error(data.error)
@@ -127,8 +132,11 @@ function AdminProducts() {
     try {
       const response = await fetch('/api/admin', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'deleteProduct', adminPassword: password, productId }),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
+        body: JSON.stringify({ action: 'deleteProduct', productId }),
       })
       const data = await response.json()
       if (!data.success) throw new Error(data.error)

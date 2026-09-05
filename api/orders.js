@@ -1,15 +1,11 @@
-/* global process */
 import crypto from 'node:crypto'
 import redis, { get, set } from './_redis.js'
+import { requireAdmin } from './_admin-auth.js'
 import { getProductCatalog } from './_products.js'
 import { getConfiguredPrice } from '../shared/products.js'
 
 const phonePattern = /^1[0-9]{10}$/
 const allowedStatuses = new Set(['pending_confirmation', 'contacted', 'paid', 'shipped', 'cancelled'])
-
-function isAdminPassword(value) {
-  return value === (process.env.ADMIN_PASSWORD || 'admin123')
-}
 
 async function createOrder(req, res) {
   const { customer, items } = req.body || {}
@@ -70,9 +66,7 @@ async function createOrder(req, res) {
 }
 
 async function listOrders(req, res) {
-  if (!isAdminPassword(req.query.adminPassword)) {
-    return res.status(401).json({ success: false, error: '管理员密码错误 / Invalid admin password' })
-  }
+  if (!await requireAdmin(req, res)) return
 
   const ids = await redis.lrange('orders:recent', 0, 199)
   const orders = (await Promise.all(ids.map((id) => get(`order:${id}`)))).filter(Boolean)
@@ -80,9 +74,7 @@ async function listOrders(req, res) {
 }
 
 async function updateOrder(req, res) {
-  if (!isAdminPassword(req.body?.adminPassword)) {
-    return res.status(401).json({ success: false, error: '管理员密码错误 / Invalid admin password' })
-  }
+  if (!await requireAdmin(req, res)) return
   if (!allowedStatuses.has(req.body?.status)) {
     return res.status(400).json({ success: false, error: '订单状态无效 / Invalid order status' })
   }

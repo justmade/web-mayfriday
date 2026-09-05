@@ -34,7 +34,9 @@ function AdminCodes() {
     setError('')
 
     try {
-      const res = await fetch(`/api/admin?action=listCodes&adminPassword=${encodeURIComponent(pwd)}`)
+      const res = await fetch('/api/admin?action=listCodes', {
+        headers: { 'x-admin-password': pwd },
+      })
       const data = await res.json()
 
       if (data.success) {
@@ -65,12 +67,14 @@ function AdminCodes() {
     try {
       const res = await fetch('/api/admin', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
         body: JSON.stringify({
           action: 'createCode',
           code: newCode.toUpperCase(),
-          courseId: courseId,
-          adminPassword: password
+          courseId: courseId
         })
       })
 
@@ -105,11 +109,13 @@ function AdminCodes() {
     try {
       const res = await fetch('/api/admin', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
         body: JSON.stringify({
           action: 'deleteCode',
-          code,
-          adminPassword: password
+          code
         })
       })
 
@@ -175,9 +181,6 @@ function AdminCodes() {
                 placeholder="请输入管理员密码"
                 required
               />
-              <p className="text-xs text-gray-500 mt-2">
-                默认密码：admin123 (请在环境变量中修改)
-              </p>
             </div>
 
             <button

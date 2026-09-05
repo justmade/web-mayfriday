@@ -1,20 +1,9 @@
-/* global process */
 import redis, { del, get, set } from './_redis.js'
+import { requireAdmin } from './_admin-auth.js'
 import { getProductCatalog, getProductCategories, normalizeProduct, saveProductCatalog } from './_products.js'
 import { getMembershipStatus, membershipTiers, normalizeMembershipInput } from './_membership.js'
 
 const phonePattern = /^1[0-9]{10}$/
-
-function isAdminPassword(value) {
-  return value === (process.env.ADMIN_PASSWORD || 'admin123')
-}
-
-function requireAdmin(req, res) {
-  const password = req.method === 'GET' ? req.query.adminPassword : req.body?.adminPassword
-  if (isAdminPassword(password)) return true
-  res.status(401).json({ success: false, error: '管理员密码错误 / Invalid admin password' })
-  return false
-}
 
 async function listCodes(req, res) {
   const keys = await redis.keys('code:*')
@@ -150,9 +139,9 @@ async function cancelMembership(req, res) {
 }
 
 export default async function handler(req, res) {
-  if (!requireAdmin(req, res)) return
-
   try {
+    if (!await requireAdmin(req, res)) return
+
     const action = req.method === 'GET' ? req.query.action : req.body?.action
 
     if (req.method === 'GET' && action === 'listCodes') return listCodes(req, res)

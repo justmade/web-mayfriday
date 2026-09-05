@@ -44,7 +44,9 @@ function AdminMembers() {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch(`/api/admin?action=listMembers&adminPassword=${encodeURIComponent(pwd)}`)
+      const response = await fetch('/api/admin?action=listMembers', {
+        headers: { 'x-admin-password': pwd },
+      })
       const data = await response.json()
       if (!data.success) throw new Error(data.error)
       setMembers(data.members)
@@ -70,10 +72,12 @@ function AdminMembers() {
     try {
       const response = await fetch('/api/admin', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
         body: JSON.stringify({
           action: 'grantMembership',
-          adminPassword: password,
           phone: form.phone,
           membership: {
             tier: form.tier,
@@ -107,8 +111,11 @@ function AdminMembers() {
     try {
       const response = await fetch('/api/admin', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'cancelMembership', adminPassword: password, phone }),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
+        body: JSON.stringify({ action: 'cancelMembership', phone }),
       })
       const data = await response.json()
       if (!data.success) throw new Error(data.error)

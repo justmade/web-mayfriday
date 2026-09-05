@@ -20,7 +20,9 @@ function AdminOrders() {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch(`/api/orders?adminPassword=${encodeURIComponent(pwd)}`)
+      const response = await fetch('/api/orders', {
+        headers: { 'x-admin-password': pwd },
+      })
       const data = await response.json()
       if (!data.success) throw new Error(data.error)
       setOrders(data.orders)
@@ -38,8 +40,11 @@ function AdminOrders() {
     try {
       const response = await fetch('/api/orders', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'updateStatus', orderId, status, adminPassword: password }),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
+        body: JSON.stringify({ action: 'updateStatus', orderId, status }),
       })
       const data = await response.json()
       if (!data.success) throw new Error(data.error)
