@@ -1,4 +1,4 @@
-import redis, { del, get, set } from './_redis.js'
+import { del, get, mgetChunked, scanKeys, set } from './_redis.js'
 import { requireAdmin } from './_admin-auth.js'
 import { getProductCatalog, getProductCategories, normalizeProduct, saveProductCatalog } from './_products.js'
 import { getMembershipStatus, membershipTiers, normalizeMembershipInput } from './_membership.js'
@@ -6,10 +6,10 @@ import { getMembershipStatus, membershipTiers, normalizeMembershipInput } from '
 const phonePattern = /^1[0-9]{10}$/
 
 async function listCodes(req, res) {
-  const keys = await redis.keys('code:*')
+  const { keys, truncated } = await scanKeys('code:*')
   if (keys.length === 0) return res.json({ success: true, codes: [], total: 0 })
 
-  const values = await redis.mget(keys)
+  const values = await mgetChunked(keys)
   const codes = keys.map((key, index) => {
     const code = key.replace('code:', '')
     const data = values[index] ? JSON.parse(values[index]) : null
@@ -17,7 +17,7 @@ async function listCodes(req, res) {
   }).filter(Boolean)
 
   codes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-  return res.json({ success: true, codes, total: codes.length })
+  return res.json({ success: true, codes, total: codes.length, truncated })
 }
 
 async function createCode(req, res) {
@@ -88,16 +88,16 @@ function presentMember(user) {
 }
 
 async function listMembers(req, res) {
-  const keys = await redis.keys('user:*')
+  const { keys, truncated } = await scanKeys('user:*')
   if (keys.length === 0) return res.json({ success: true, members: [] })
 
-  const values = await redis.mget(keys)
+  const values = await mgetChunked(keys)
   const members = values
     .map((value) => value ? presentMember(JSON.parse(value)) : null)
     .filter((member) => member?.membership)
     .sort((a, b) => new Date(b.membership?.updatedAt || b.membership?.startedAt || 0) - new Date(a.membership?.updatedAt || a.membership?.startedAt || 0))
 
-  return res.json({ success: true, members, tiers: Object.values(membershipTiers) })
+  return res.json({ success: true, members, tiers: Object.values(membershipTiers), truncated })
 }
 
 async function grantMembership(req, res) {

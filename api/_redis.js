@@ -53,4 +53,49 @@ export async function del(key) {
   await redis.del(key)
 }
 
+/**
+ * 按模式扫描 key（游标分批，替代 KEYS）
+ *
+ * KEYS 是 O(N) 阻塞命令，会占住 Redis 单线程直到扫完整个键空间；本服务是
+ * 单进程 Express，一次慢查询会拖住全站所有请求。SCAN 每次只扫一小批，
+ * 把停顿摊薄到多次往返。
+ *
+ * SCAN 可能返回重复 key（扩缩容 rehash 期间），因此用 Set 去重。
+ *
+ * @param {string} pattern - 匹配模式，如 'user:*'
+ * @param {{count?: number, limit?: number}} options
+ * @returns {Promise<{keys: string[], truncated: boolean}>}
+ */
+export async function scanKeys(pattern, { count = 500, limit = 20000 } = {}) {
+  const found = new Set()
+  let cursor = '0'
+
+  do {
+    const [nextCursor, batch] = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', count)
+    cursor = nextCursor
+
+    for (const key of batch) {
+      found.add(key)
+      // 兜底：键空间异常膨胀时不要把整个进程的内存和响应体撑爆
+      if (found.size >= limit) return { keys: [...found], truncated: true }
+    }
+  } while (cursor !== '0')
+
+  return { keys: [...found], truncated: false }
+}
+
+/**
+ * 分批 MGET
+ *
+ * 一次性 MGET 上万个 key 同样是一条巨型命令，会阻塞 Redis 并可能超出
+ * 协议缓冲区。分批发送，单批控制在可控规模。
+ */
+export async function mgetChunked(keys, chunkSize = 200) {
+  const values = []
+  for (let index = 0; index < keys.length; index += chunkSize) {
+    values.push(...await redis.mget(keys.slice(index, index + chunkSize)))
+  }
+  return values
+}
+
 export default redis
