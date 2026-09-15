@@ -346,9 +346,9 @@ export const course1Data = {
         {
           type: "video",
           platform: "oss",
-          src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/playlist.m3u8",
+          src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/bracelet/playlist.m3u8",
           thumbnail: "/images/courses/course1/手链制作视频.jpeg",
-          duration: "16:25",
+          duration: "7:53",
           title: "手链制作完整演示",
           titleEn: "Bracelet Making Full Demonstration",
         },

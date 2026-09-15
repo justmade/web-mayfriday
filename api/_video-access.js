@@ -8,6 +8,7 @@ export const COURSE_PLAYLISTS = new Map([
   ['courses/course1/playlist.m3u8', 'course1'],
   ['courses/course1/theory/playlist.m3u8', 'course1'],
   ['courses/course1/weaving/playlist.m3u8', 'course1'],
+  ['courses/course1/bracelet/playlist.m3u8', 'course1'],
   ['courses/course2/inkle-basics/playlist.m3u8', 'course2'],
   ['courses/course3/playlist.m3u8', 'course3'],
 ])
