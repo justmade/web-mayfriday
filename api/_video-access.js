@@ -2,8 +2,12 @@ import path from 'node:path'
 
 import { isMembershipActive } from './_membership.js'
 
+// 新增课程视频时必须在这里登记,否则 /api/video-token 会返回 404,视频播不了。
+// 光把文件传到 OSS 是不够的 —— 这是白名单,不是前缀匹配。
 export const COURSE_PLAYLISTS = new Map([
   ['courses/course1/playlist.m3u8', 'course1'],
+  ['courses/course1/theory/playlist.m3u8', 'course1'],
+  ['courses/course1/weaving/playlist.m3u8', 'course1'],
   ['courses/course2/inkle-basics/playlist.m3u8', 'course2'],
   ['courses/course3/playlist.m3u8', 'course3'],
 ])

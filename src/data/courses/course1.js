@@ -310,9 +310,9 @@ export const course1Data = {
         {
           type: "video",
           platform: "oss",
-          src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/playlist.m3u8",
+          src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/theory/playlist.m3u8",
           thumbnail: "/images/courses/course1/理论知识视频.png",
-          duration: "16:25",
+          duration: "5:37",
           title: "卡织理论知识详解",
           titleEn: "Card Weaving Theory Explained",
         },
@@ -328,9 +328,9 @@ export const course1Data = {
         {
           type: "video",
           platform: "oss",
-          src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/playlist.m3u8",
+          src: "https://web-mayfriday-videos.oss-cn-beijing.aliyuncs.com/courses/course1/weaving/playlist.m3u8",
           thumbnail: "/images/courses/course1/开始编织视频.jpeg",
-          duration: "16:25",
+          duration: "33:03",
           title: "开始编织 - 完整操作演示",
           titleEn: "Start Weaving - Full Demonstration",
         },
