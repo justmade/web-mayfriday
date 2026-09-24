@@ -55,12 +55,12 @@ describe('video-token', () => {
     })
     const res = response()
 
-    await handler(request('courses/course3/playlist.m3u8', 'login-token'), res)
+    await handler(request('courses/course3/warping/playlist.m3u8', 'login-token'), res)
 
     const payload = res.json.mock.calls.at(-1)[0]
     const decoded = jwt.verify(payload.token, process.env.JWT_SECRET)
     expect(payload.expiresIn).toBe(300)
-    expect(decoded).toMatchObject({ type: 'video', path: 'courses/course3/playlist.m3u8' })
+    expect(decoded).toMatchObject({ type: 'video', path: 'courses/course3/warping/playlist.m3u8' })
   })
 
   it('allows an exact public resource playlist without login', async () => {

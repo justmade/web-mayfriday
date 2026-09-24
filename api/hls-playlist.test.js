@@ -43,7 +43,7 @@ describe('hls-playlist', () => {
     )
     const res = response()
 
-    await handler(request('courses/course3/playlist.m3u8', token), res)
+    await handler(request('courses/course3/warping/playlist.m3u8', token), res)
 
     expect(res.status).toHaveBeenCalledWith(403)
     expect(mocks.get).not.toHaveBeenCalled()

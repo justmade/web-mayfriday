@@ -10,7 +10,11 @@ export const COURSE_PLAYLISTS = new Map([
   ['courses/course1/weaving/playlist.m3u8', 'course1'],
   ['courses/course1/bracelet/playlist.m3u8', 'course1'],
   ['courses/course2/inkle-basics/playlist.m3u8', 'course2'],
-  ['courses/course3/playlist.m3u8', 'course3'],
+  ['courses/course3/warping/playlist.m3u8', 'course3'],
+  ['courses/course3/selvedge/playlist.m3u8', 'course3'],
+  ['courses/course3/weft-joining/playlist.m3u8', 'course3'],
+  ['courses/course3/color-block/playlist.m3u8', 'course3'],
+  ['courses/course3/finishing/playlist.m3u8', 'course3'],
 ])
 
 export const PUBLIC_RESOURCE_PLAYLISTS = new Set([
@@ -38,7 +42,10 @@ export function courseIdForObject(objectPath) {
 }
 
 export function userCanAccessCourse(user, courseId) {
-  return isMembershipActive(user?.membership) || (user?.courses || []).includes(courseId)
+  // 用 Array.isArray 而非 `|| []`:Lua 的 cjson 会把空表编码成 {} 而非 [],
+  // 而 {} 是 truthy —— `(user.courses || []).includes()` 会抛 TypeError 并 500。
+  const courses = Array.isArray(user?.courses) ? user.courses : []
+  return isMembershipActive(user?.membership) || courses.includes(courseId)
 }
 
 export function resolvePlaylistObject(playlistPath, uri) {
