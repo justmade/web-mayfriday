@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { HiCheckCircle, HiChevronRight } from 'react-icons/hi'
 import { courseMap } from '../data/courses/index'
-import useProgressStore from '../store/progressStore'
+import useAuthStore from '../store/authStore'
+import CourseLessonList from '../components/courses/CourseLessonList'
+import WovenBraceletLanding from '../components/courses/WovenBraceletLanding'
 
 function CourseOverview() {
   const { courseId } = useParams()
@@ -10,8 +12,46 @@ function CourseOverview() {
   const zh = i18n.language === 'zh'
 
   const course = courseMap[courseId]
-  const isComplete = useProgressStore((s) => s.isComplete)
-  const getProgress = useProgressStore((s) => s.getProgress)
+
+  const { isLoggedIn, token } = useAuthStore()
+  const [hasAccess, setHasAccess] = useState(false)
+  const [kicked, setKicked] = useState(false)
+  const [checking, setChecking] = useState(false)
+
+  // 本页公开可访问,权限在页面内部判断:没有权限就降级成预览版,而不是把人挡在门外。
+  useEffect(() => {
+    if (!isLoggedIn || !token) {
+      setHasAccess(false)
+      setKicked(false)
+      return
+    }
+
+    let active = true
+    const controller = new AbortController()
+    setChecking(true)
+
+    fetch(`/api/check-course-access?courseId=${courseId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: controller.signal,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!active) return
+        setKicked(!!data.kicked)
+        setHasAccess(!!data.hasAccess)
+      })
+      .catch(() => {
+        // 静默降级为预览版,不用报错打断浏览
+      })
+      .finally(() => {
+        if (active) setChecking(false)
+      })
+
+    return () => {
+      active = false
+      controller.abort()
+    }
+  }, [courseId, isLoggedIn, token])
 
   if (!course) {
     return (
@@ -21,9 +61,21 @@ function CourseOverview() {
     )
   }
 
-  const { completed, total } = getProgress(courseId, course.lessons.length)
-  const progressPct = total > 0 ? Math.round((completed / total) * 100) : 0
+  // 有 landing 的课程(目前只有梭织手链)走设计稿专属版式。
+  if (course.landing) {
+    return (
+      <WovenBraceletLanding
+        course={course}
+        courseId={courseId}
+        zh={zh}
+        hasAccess={hasAccess}
+        kicked={kicked}
+        checking={checking}
+      />
+    )
+  }
 
+  const total = course.lessons.length
   const title = zh ? course.title : course.titleEn
   const description = zh ? course.description : course.descriptionEn
 
@@ -52,8 +104,9 @@ function CourseOverview() {
           <p className="text-gray-700 leading-relaxed text-lg">{description}</p>
         </div>
 
-        {/* Intro Images (full display, stacked vertically) */}
-        {course.introImages?.length > 0 && (
+        {/* 介绍图与作品图是给还没开通的人看的卖点素材。
+            已开通用户直奔课程目录即可,不用再滚过一屏推销内容。 */}
+        {!hasAccess && course.introImages?.length > 0 && (
           <div className="flex flex-col gap-3 mb-4">
             {course.introImages.map((src, i) => (
               <div key={i} className="rounded-lg overflow-hidden">
@@ -63,8 +116,7 @@ function CourseOverview() {
           </div>
         )}
 
-        {/* Gallery */}
-        {course.galleryImages?.length > 0 && (
+        {!hasAccess && course.galleryImages?.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
             {course.galleryImages.map((src, i) => (
               <div key={i} className="rounded-lg overflow-hidden aspect-square">
@@ -74,57 +126,29 @@ function CourseOverview() {
           </div>
         )}
 
-        {/* Progress + Lesson List */}
-        <div className="bg-white rounded-xl shadow-soft p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900">
-              {zh ? '课程目录' : 'Course Contents'}
-            </h2>
-            <span className="text-sm text-gray-500">
-              {zh ? `进度：${completed}/${total}` : `Progress: ${completed}/${total}`}
-            </span>
+        {/* 被踢下线的用户其实拥有课程,不能让他看到「去激活」而困惑 */}
+        {kicked && (
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8">
+            <p className="text-amber-900">
+              {zh
+                ? '登录状态已失效。同一账号最多可在 2 台设备上使用，请重新登录后继续学习。'
+                : 'Your session has expired. An account can stay signed in on up to 2 devices. Please sign in again to continue.'}
+            </p>
+            <Link to="/login?redirect=/my-courses" className="btn-primary inline-block mt-4">
+              {zh ? '重新登录' : 'Sign in again'}
+            </Link>
           </div>
+        )}
 
-          {/* Progress bar */}
-          <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
-            <div
-              className="bg-primary h-2 rounded-full transition-all duration-500"
-              style={{ width: `${progressPct}%` }}
-            />
-          </div>
-
-          {/* Lesson list */}
-          <ol className="space-y-2">
-            {course.lessons.map((lesson) => {
-              const done = isComplete(courseId, lesson.index)
-              const lessonTitle = zh ? lesson.title : lesson.titleEn
-              return (
-                <li key={lesson.index}>
-                  <Link
-                    to={`/courses/${courseId}/lessons/${lesson.index}`}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                      done
-                        ? 'bg-green-50 hover:bg-green-100'
-                        : 'bg-gray-50 hover:bg-gray-100'
-                    }`}
-                  >
-                    {done ? (
-                      <HiCheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    ) : (
-                      <span className="w-5 h-5 rounded-full border-2 border-gray-300 flex-shrink-0 text-xs flex items-center justify-center text-gray-400">
-                        {lesson.index + 1}
-                      </span>
-                    )}
-                    <span className={`flex-1 text-sm md:text-base ${done ? 'text-green-800' : 'text-gray-700'}`}>
-                      {lesson.index + 1}. {lessonTitle}
-                    </span>
-                    <HiChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                  </Link>
-                </li>
-              )
-            })}
-          </ol>
-        </div>
+        {/* Lesson List */}
+        <CourseLessonList
+          courseId={courseId}
+          lessons={course.lessons}
+          hasAccess={hasAccess}
+          kicked={kicked}
+          checking={checking}
+          zh={zh}
+        />
       </div>
     </div>
   )
